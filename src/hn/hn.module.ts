@@ -1,0 +1,1 @@
+import { ConfigModule } from '../config.module';
