@@ -1,16 +1,18 @@
 {
   "compilerOptions": {
     "lib": [
-      "es6",
-      "dom"
+      "es2018",
+      "dom",
+      "dom.iterable"
     ],
     "noImplicitAny": true,
     "allowJs": true,
-    "target": "es2019",
+    "target": "es2018",
     "strict": true,
-    "module": "es6",
-    "moduleResolution": "node",
-    "outDir": "../dist/public/scripts",
+    "module": "commonjs",
+    "moduleResolution": "classic",
+    "outDir": "../public/scripts",
     "sourceMap": true
-  }
+  },
+  "exclude": ["../node_modules", "../test", "../dist", "../**/*spec.ts"]
 }

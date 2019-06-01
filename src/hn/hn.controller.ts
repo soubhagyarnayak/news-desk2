@@ -9,7 +9,6 @@ export class HnController {
     @Get()
     async getHn(@Req() req, @Res() res,err) {
         let allArticles : HnArticle[] = await this.hnService.getAll();
-        console.log(allArticles[0]);
         return res.render('hn',{articles:allArticles});
     }
 }
