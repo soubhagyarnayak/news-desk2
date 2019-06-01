@@ -4,10 +4,12 @@ import { AppService } from './app.service';
 import { ConfigModule } from './config.module';
 import { HnService } from './hn/hn.service'
 import { HnController } from './hn/hn.controller';
+import { SettingsController } from './settings/settings.controller';
+import { SettingsService } from './settings/settings.service';
 
 @Module({
   imports: [ConfigModule],
-  controllers: [AppController, HnController],
-  providers: [AppService, HnService],
+  controllers: [AppController, HnController, SettingsController],
+  providers: [AppService, HnService, SettingsService],
 })
 export class AppModule {}
