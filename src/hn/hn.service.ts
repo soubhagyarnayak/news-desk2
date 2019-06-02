@@ -9,12 +9,14 @@ export class HnService {
     private password: string;
     private host: string;
     private database: string;
+    
     constructor(config: ConfigService) {
         this.user = config.get('DB_USER');
         this.password = config.get('DB_PASSWORD');
         this.host = config.get('DB_HOST');
         this.database = config.get('DB_DATABASE');
     }
+
     async getAll(): Promise<HnArticle[]> { 
         const pool = new Pool( {
             user: this.user,
@@ -29,5 +31,21 @@ export class HnService {
             articles.push(article);
         });
         return articles;
+    }
+
+    async update(query:string, args:Array<string>): Promise<boolean>{
+        const pool = new Pool( {
+            user: this.user,
+            password: this.password,
+            host: this.host,
+            database: this.database,
+        });
+        pool.query(query,args,function(err,result){
+            if(err){
+                console.log(err);
+                return false;
+            }
+        });
+        return true;
     }
 }
