@@ -1,6 +1,7 @@
 import { Controller, Get, Req, Res, Post } from '@nestjs/common';
 import { HnService } from './hn.service';
 import { HnArticle } from './hnArticle.interface';
+import { HnArticleAnnotationInfo } from './hnArticleAnnotationInfo.interface';
 
 @Controller('hn')
 export class HnController {
@@ -33,6 +34,17 @@ export class HnController {
         }
         else{
             res.status(400).send("failure");
+        }
+    }
+
+    @Get("/article")
+    async getHnArticle(@Req() req, @Res() res,err){
+        let annotationInfo:HnArticleAnnotationInfo = await this.hnService.getArticle(req.query.id);
+        if(annotationInfo == null){
+            res.status(500).send("Error");
+        }
+        else{
+            res.status(200).send(annotationInfo);
         }
     }
 }

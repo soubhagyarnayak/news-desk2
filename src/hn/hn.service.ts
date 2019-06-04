@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { HnArticle } from './hnArticle.interface';
+import { HnArticleAnnotationInfo } from './hnArticleAnnotationInfo.interface';
 import { ConfigService } from '../config.service';
 import { Pool } from 'pg';
 
@@ -18,12 +19,7 @@ export class HnService {
     }
 
     async getAll(): Promise<HnArticle[]> { 
-        const pool = new Pool( {
-            user: this.user,
-            password: this.password,
-            host: this.host,
-            database: this.database,
-        });
+        const pool = this.getPool();
         let results = await pool.query("SELECT id,link as href,title FROM hackernewsarticles WHERE isread IS NULL AND isremoved IS NULL ORDER BY CreateTime DESC");
         let articles = new Array<HnArticle>();
         results.rows.forEach(function(row){
@@ -34,12 +30,7 @@ export class HnService {
     }
 
     async update(query:string, args:Array<string>): Promise<boolean>{
-        const pool = new Pool( {
-            user: this.user,
-            password: this.password,
-            host: this.host,
-            database: this.database,
-        });
+        const pool = this.getPool();
         pool.query(query,args,function(err,result){
             if(err){
                 console.log(err);
@@ -47,5 +38,27 @@ export class HnService {
             }
         });
         return true;
+    }
+
+    async getArticle(id:string):Promise<HnArticleAnnotationInfo>{
+        const pool = this.getPool();
+        var query = "SELECT tags,notes,description FROM hackernewsarticles WHERE id=$1";
+        var args = [id];
+        var annotationInfo = null;
+        let result = await pool.query(query,args);
+        if(result.rows.length>0){
+            var row = result.rows[0];
+            annotationInfo = {'tags':row.tags,'notes':row.notes,'description':row.description}; 
+        }
+        return annotationInfo;
+    }
+
+    private getPool():Pool {
+        return new Pool( {
+            user: this.user,
+            password: this.password,
+            host: this.host,
+            database: this.database,
+        });
     }
 }
