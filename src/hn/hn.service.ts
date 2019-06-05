@@ -3,6 +3,7 @@ import { HnArticle } from './hnArticle.interface';
 import { HnArticleAnnotationInfo } from './hnArticleAnnotationInfo.interface';
 import { ConfigService } from '../config.service';
 import { Pool } from 'pg';
+import { HnTag, HnTagDetails } from './hnTag.interface';
 
 @Injectable()
 export class HnService {
@@ -51,6 +52,32 @@ export class HnService {
             annotationInfo = {'tags':row.tags,'notes':row.notes,'description':row.description}; 
         }
         return annotationInfo;
+    }
+
+    async getAllTags(): Promise<HnTag[]> {
+        const pool = this.getPool();
+        var query = "SELECT id,tag,description FROM hacker_news_tags";
+        let result = await pool.query(query);
+        let tags = new Array<HnTag>();
+        result.rows.forEach(function(row){
+            let tag:HnTag  = {id:row["id"], tag:row["tag"], description:row["description"]};
+            tags.push(tag);
+        });
+        return tags;
+    }
+
+    async getTagDetails(tagId:string): Promise<HnTagDetails> {
+        const pool = this.getPool();
+        let getTagQuery = "SELECT id,tag,description FROM hacker_news_tags WHERE id=$1";
+        let result = await pool.query(getTagQuery,[tagId]);
+        let tagDetails:HnTagDetails = {articles:[],tag:null}
+        if(result.rowCount>0){
+            let tagInstance:HnTag = {id:result.rows[0]["id"], tag:result.rows[0]["tag"], description:result.rows[0]["description"]};
+            let getArticlesQuery = "SELECT * FROM hackernewsarticles WHERE Tags LIKE $1 ORDER BY CreateTime DESC";
+            let articleResult = await pool.query(getArticlesQuery, [`%${tagInstance.tag}%`]);
+            tagDetails = {tag:tagInstance,articles:articleResult.rows};
+        }
+        return tagDetails; 
     }
 
     private getPool():Pool {

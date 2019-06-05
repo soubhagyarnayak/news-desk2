@@ -2,6 +2,7 @@ import { Controller, Get, Req, Res, Post } from '@nestjs/common';
 import { HnService } from './hn.service';
 import { HnArticle } from './hnArticle.interface';
 import { HnArticleAnnotationInfo } from './hnArticleAnnotationInfo.interface';
+import { HnTag, HnTagDetails } from './hnTag.interface';
 
 @Controller('hn')
 export class HnController {
@@ -46,5 +47,17 @@ export class HnController {
         else{
             res.status(200).send(annotationInfo);
         }
+    }
+
+    @Get("/tags")
+    async getTags(@Req() req, @Res() res, err){
+        let tags:HnTag[] = await this.hnService.getAllTags();
+        return res.render('tags',{tags:tags});
+    }
+
+    @Get("/tags/:tagId")
+    async getTag(@Req() req, @Res() res, err){
+        let hnTagDetails:HnTagDetails = await this.hnService.getTagDetails(req.params.tagId);
+        return res.render("tag",{articles:hnTagDetails.articles,tag:hnTagDetails.tag.tag,tagId:hnTagDetails.tag.id,description:hnTagDetails.tag.description});
     }
 }
