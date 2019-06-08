@@ -34,6 +34,7 @@
     "ejs": "^2.6.1",
     "morgan": "^1.9.1",
     "pg": "^7.11.0",
+    "querystringify": ">=2.1.1",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
     "rxjs": "^6.3.3"
