@@ -9,7 +9,9 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true
+    "incremental": true,
   },
-  "exclude": ["node_modules","./scripts"]
+  "exclude": ["node_modules","./scripts"],
+  "noImpicitAny": true,
+  "strictNullChecks": true,
 }
