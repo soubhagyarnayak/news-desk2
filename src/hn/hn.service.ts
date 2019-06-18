@@ -11,17 +11,18 @@ export class HnService {
     private password: string;
     private host: string;
     private database: string;
+    private pool: Pool;
     
     constructor(config: ConfigService) {
         this.user = config.get('DB_USER');
         this.password = config.get('DB_PASSWORD');
         this.host = config.get('DB_HOST');
         this.database = config.get('DB_DATABASE');
+        this.pool = this.getPool();
     }
 
     async getAll(): Promise<HnArticle[]> { 
-        const pool = this.getPool();
-        let results = await pool.query("SELECT id,link as href,title FROM hackernewsarticles WHERE isread IS NULL AND isremoved IS NULL ORDER BY CreateTime DESC");
+        let results = await this.pool.query("SELECT id,link as href,title FROM hackernewsarticles WHERE isread IS NULL AND isremoved IS NULL ORDER BY CreateTime DESC");
         let articles = new Array<HnArticle>();
         results.rows.forEach(function(row){
             let article:HnArticle  = {id:row["id"], link:row["href"], title:row["title"]};
@@ -31,8 +32,7 @@ export class HnService {
     }
 
     async update(query:string, args:Array<string>): Promise<boolean>{
-        const pool = this.getPool();
-        pool.query(query,args,function(err,result){
+        this.pool.query(query,args,function(err,result){
             if(err){
                 console.log(err);
                 return false;
@@ -42,11 +42,10 @@ export class HnService {
     }
 
     async getArticle(id:string):Promise<HnArticleAnnotationInfo>{
-        const pool = this.getPool();
         var query = "SELECT tags,notes,description FROM hackernewsarticles WHERE id=$1";
         var args = [id];
         var annotationInfo = null;
-        let result = await pool.query(query,args);
+        let result = await this.pool.query(query,args);
         if(result.rows.length>0){
             var row = result.rows[0];
             annotationInfo = {'tags':row.tags,'notes':row.notes,'description':row.description}; 
@@ -55,9 +54,8 @@ export class HnService {
     }
 
     async getAllTags(): Promise<HnTag[]> {
-        const pool = this.getPool();
         var query = "SELECT id,tag,description FROM hacker_news_tags";
-        let result = await pool.query(query);
+        let result = await this.pool.query(query);
         let tags = new Array<HnTag>();
         result.rows.forEach(function(row){
             let tag:HnTag  = {id:row["id"], tag:row["tag"], description:row["description"]};
@@ -67,14 +65,13 @@ export class HnService {
     }
 
     async getTagDetails(tagId:string): Promise<HnTagDetails> {
-        const pool = this.getPool();
         let getTagQuery = "SELECT id,tag,description FROM hacker_news_tags WHERE id=$1";
-        let result = await pool.query(getTagQuery,[tagId]);
+        let result = await this.pool.query(getTagQuery,[tagId]);
         let tagDetails:HnTagDetails = {articles:[],tag:null}
         if(result.rowCount>0){
             let tagInstance:HnTag = {id:result.rows[0]["id"], tag:result.rows[0]["tag"], description:result.rows[0]["description"]};
             let getArticlesQuery = "SELECT * FROM hackernewsarticles WHERE Tags LIKE $1 ORDER BY CreateTime DESC";
-            let articleResult = await pool.query(getArticlesQuery, [`%${tagInstance.tag}%`]);
+            let articleResult = await this.pool.query(getArticlesQuery, [`%${tagInstance.tag}%`]);
             tagDetails = {tag:tagInstance,articles:articleResult.rows};
         }
         return tagDetails; 

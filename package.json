@@ -34,7 +34,6 @@
     "ejs": "^2.6.1",
     "morgan": "^1.9.1",
     "pg": "^7.11.0",
-    "querystringify": ">=2.1.1",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
     "rxjs": "^6.3.3"
@@ -49,6 +48,7 @@
     "jest": "^24.8.0",
     "nodemon": "^1.18.9",
     "prettier": "^1.15.3",
+    "querystringify": "^2.1.1",
     "supertest": "^3.4.1",
     "ts-jest": "24.0.2",
     "ts-node": "8.1.0",
