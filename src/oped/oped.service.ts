@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { OpedArticle } from './opedArticle.interface';
 import { OpedCategory, OpedCategoryCollection } from './opedCategory.interface';
+import { OpedAnnotation } from './opedAnnotation.interface';
 import { ConfigService } from '../config.service';
 import { Pool } from 'pg';
 
@@ -40,6 +41,46 @@ export class OpedService {
             categories.push({'title':key,'articles':categoriesMap.get(key)});
         }
         return {"categories":categories, "pending":pending};
+    }
+
+    async update(query:string, args:Array<string>): Promise<boolean>{
+        this.pool.query(query,args,function(err,result){
+            if(err){
+                console.log(err);
+                return false;
+            }
+        });
+        return true;
+    }
+
+    async markRead(id:string): Promise<boolean> {
+        let query = "UPDATE OpEdArticle SET isread = true WHERE id = $1";
+        let args = [id];
+        return await this.update(query, args);
+    }
+
+    async remove(id:string): Promise<boolean> {
+        let query = "UPDATE OpEdArticle SET isremoved = true WHERE id =$1";
+        let args = [id];
+        return await this.update(query, args);
+    }
+
+    async annotate(id:string, notes:string, tags:string) : Promise<boolean> {
+        let query = "UPDATE OpEdArticle SET tags = $1, notes=$2 WHERE id =$3";
+        let args = [tags,notes,id];
+        return await this.update(query,args);
+    }
+
+    async getArticle(id:string):Promise<OpedAnnotation>{
+        var query = "SELECT tags,notes,description FROM OpEdArticle WHERE id=$1";
+        var args = [id];
+        var annotationInfo = null;
+        let result = await this.pool.query(query,args);
+        if(result.rows.length>0){
+            var row = result.rows[0];
+            annotationInfo = {'tags':row.tags,'notes':row.notes,'description':row.description}; 
+        }
+        return annotationInfo;
     }
 
     private getPool():Pool {
