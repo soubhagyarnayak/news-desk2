@@ -36,9 +36,9 @@
         <ul>
             <% articles.forEach(function(article){ %>
                 <li id="<%=article.id%>"><a href="https://news.ycombinator.com/item?id=<%=article.id%>" target="_blank"><%= article.title%></a>&nbsp;
-                    <input type="button" value="Mark Read" id="rb<%= article.id%>" class="readButton"/>&nbsp;
-                    <input type="button" value="Remove" id="rmb<%= article.id%>" class="removeButton"/>&nbsp;
-                    <input type="button" value="Annotate" id="ann<%= article.id%>" class="annotateButton"/>&nbsp;
+                    <input type="button" value="Mark Read" id="rb<%= article.id%>" class="readButton btn btn-outline-dark"/>&nbsp;
+                    <input type="button" value="Remove" id="rmb<%= article.id%>" class="removeButton btn btn-outline-dark"/>&nbsp;
+                    <input type="button" value="Annotate" id="ann<%= article.id%>" class="annotateButton btn btn-outline-dark"/>&nbsp;
                 </li>
             <%  }); %>
         </ul>
