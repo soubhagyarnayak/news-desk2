@@ -54,7 +54,7 @@ export class HnService {
     }
 
     async getAllTags(): Promise<HnTag[]> {
-        var query = "SELECT id,tag,description FROM hacker_news_tags";
+        var query = "SELECT id,tag,description FROM hacker_news_tags ORDER BY tag";
         let result = await this.pool.query(query);
         let tags = new Array<HnTag>();
         result.rows.forEach(function(row){
