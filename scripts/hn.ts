@@ -64,9 +64,9 @@ let annotateButtonClicked = function(event:any){
             notesContainer.style.verticalAlign = "middle";
             notesContainer.style.display = "block";
             notesContainer.setAttribute("associatedId",id);
-            console.log(data);
             (<HTMLInputElement>document.getElementById("tags")).value = data.tags||'';
             (<HTMLInputElement>document.getElementById('notes')).value = data.notes||'';
+            document.getElementById("availableTags")!.textContent = document.getElementById("tags")!.getAttribute("data-tags")!.split(" ").join(",");
         }
     }).catch(error=>{
         console.error('Encountered error while getting annotations.', error);
@@ -80,6 +80,15 @@ let dismissAlert = function dismissAlert(){
 let dismissNotes = function dismissNotes(){
     document.getElementById('notesContainer')!.style.display = "none";
 };
+
+let tagKeyDown = function tagKeyDown(event:any){
+    if( event.isComposing || event.keyCode == 229){
+        return;
+    }
+    let text = event.target.value;
+    let tags:string = event.target.getAttribute("data-tags");
+    document.getElementById("availableTags")!.textContent = tags.split(",").filter(x=>x.startsWith(text)).join(",");
+}
 
 document.addEventListener("DOMContentLoaded", function(event){
     document.getElementById("addAnnotationButton")!.addEventListener("click",addAnnotateButtonClicked);
@@ -102,4 +111,5 @@ document.addEventListener("DOMContentLoaded", function(event){
     document.getElementById("errorMessage")!.addEventListener("click",dismissAlert);
     document.getElementById("notesCloseButton")!.addEventListener("click",dismissNotes);
     document.getElementById("notesCrossButton")!.addEventListener("click",dismissNotes);
+    document.getElementById("tags")!.addEventListener("keydown",tagKeyDown);
 });

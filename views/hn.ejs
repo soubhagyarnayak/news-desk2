@@ -20,7 +20,8 @@
                     </div>
                     <div class="modal-body">
                         <textarea id="notes" style="display:block;width:100%;padding: 2px" placeholder="add notes"></textarea>
-                        <textarea id="tags" style="display:block;width:100%;padding: 2px" placeholder="add tags"></textarea>
+                        <textarea id="tags" style="display:block;width:100%;padding: 2px" placeholder="add tags" data-tags="<%= tags.map(t=>t.tag)%>"></textarea>
+                        <textarea id="availableTags" style="display:block;width:100%;padding: 2px"></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" id="notesCloseButton">Close</button>

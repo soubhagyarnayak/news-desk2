@@ -11,7 +11,8 @@ export class HnController {
     @Get()
     async getHn(@Req() req, @Res() res,err) {
         let allArticles : HnArticle[] = await this.hnService.getAll();
-        return res.render('hn',{articles:allArticles});
+        let allTags : HnTag[] = await this.hnService.getAllTags();
+        return res.render('hn',{articles:allArticles, tags:allTags});
     }
 
     @Post("/")
