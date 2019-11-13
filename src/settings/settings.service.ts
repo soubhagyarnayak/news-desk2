@@ -1,10 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { connect } from 'amqplib';
+import { ConfigService } from '../config.service';
 
 @Injectable()
 export class SettingsService {
+    private queueConnectionString: string;
+
+    constructor(config: ConfigService) {
+        this.queueConnectionString = config.get('QUEUE_CONNECTION_STRING');
+    }
+
     async runCommand(command:any):Promise<boolean>{
-        connect('amqp://localhost')
+        connect(this.queueConnectionString)
         .then(connection => {
             connection.createChannel()
                 .tap(channel => channel.checkQueue('newsparser'))
