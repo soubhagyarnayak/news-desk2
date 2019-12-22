@@ -21,14 +21,18 @@ export class HnService {
         this.pool = this.getPool();
     }
 
-    async getAll(): Promise<HnArticle[]> { 
-        let results = await this.pool.query("SELECT id,link as href,title FROM hackernewsarticles WHERE isread IS NULL AND isremoved IS NULL ORDER BY CreateTime DESC");
-        let articles = new Array<HnArticle>();
+    async getAll(): Promise<Map<string,Array<HnArticle>>> { 
+        let results = await this.pool.query("SELECT id,link as href,title,createtime FROM hackernewsarticles WHERE isread IS NULL AND isremoved IS NULL ORDER BY CreateTime DESC");
+        let articlesForDates = new Map<string,Array<HnArticle>>();
         results.rows.forEach(function(row){
-            let article:HnArticle  = {id:row["id"], link:row["href"], title:row["title"]};
-            articles.push(article);
+            let article:HnArticle  = {id:row["id"], link:row["href"], title:row["title"], createTime:row["createtime"]};
+            let key = article.createTime.toLocaleDateString();
+            if(!articlesForDates.has(key)){
+                articlesForDates.set(key,new Array<HnArticle>());
+            }
+            articlesForDates.get(key).push(article);
         });
-        return articles;
+        return articlesForDates;
     }
 
     async update(query:string, args:Array<string>): Promise<boolean>{

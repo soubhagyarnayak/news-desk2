@@ -34,15 +34,18 @@
             <h1>Hacker news articles. </h1>
             <p class="lead">Backlog count:<%=articles.length%></p>
         </div>
-        <ul>
-            <% articles.forEach(function(article){ %>
-                <li id="<%=article.id%>"><a href="https://news.ycombinator.com/item?id=<%=article.id%>" target="_blank"><%= article.title%></a>&nbsp;
-                    <input type="button" value="Mark Read" id="rb<%= article.id%>" class="readButton btn btn-outline-dark"/>&nbsp;
-                    <input type="button" value="Remove" id="rmb<%= article.id%>" class="removeButton btn btn-outline-dark"/>&nbsp;
-                    <input type="button" value="Annotate" id="ann<%= article.id%>" class="annotateButton btn btn-outline-dark"/>&nbsp;
-                </li>
-            <%  }); %>
-        </ul>
+        <% for (let key of articles.keys()){%>
+            <h3><%=key%></h3>
+            <ul>
+                <% articles.get(key).forEach(function(article){ %>
+                    <li id="<%=article.id%>"><a href="https://news.ycombinator.com/item?id=<%=article.id%>" target="_blank"><%= article.title%></a>&nbsp;
+                        <input type="button" value="Mark Read" id="rb<%= article.id%>" class="readButton btn btn-outline-dark"/>&nbsp;
+                        <input type="button" value="Remove" id="rmb<%= article.id%>" class="removeButton btn btn-outline-dark"/>&nbsp;
+                        <input type="button" value="Annotate" id="ann<%= article.id%>" class="annotateButton btn btn-outline-dark"/>&nbsp;
+                    </li>
+                <%  }); %>
+            </ul>
+        <%}%>
     </main>
     <script> var exports = {}; </script>
     <script src="/scripts/hn.js" type="module"></script>
