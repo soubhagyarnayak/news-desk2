@@ -32,10 +32,10 @@
         </div>
         <div class="jumbotron">
             <h1>Hacker news articles. </h1>
-            <p class="lead">Backlog count:<%=articles.length%></p>
+            <p class="lead">Backlog count:<%=backlogCount%></p>
         </div>
         <% for (let key of articles.keys()){%>
-            <h3><%=key%></h3>
+            <h3><%=key%>: To Read <%=articles.get(key).length%></h3>
             <ul>
                 <% articles.get(key).forEach(function(article){ %>
                     <li id="<%=article.id%>"><a href="https://news.ycombinator.com/item?id=<%=article.id%>" target="_blank"><%= article.title%></a>&nbsp;

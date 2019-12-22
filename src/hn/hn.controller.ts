@@ -1,6 +1,6 @@
 import { Controller, Get, Req, Res, Post } from '@nestjs/common';
 import { HnService } from './hn.service';
-import { HnArticle } from './hnArticle.interface';
+import { HnArticlePerDayMap } from './hnArticle.interface';
 import { HnArticleAnnotationInfo } from './hnArticleAnnotationInfo.interface';
 import { HnTag, HnTagDetails } from './hnTag.interface';
 
@@ -10,9 +10,9 @@ export class HnController {
 
     @Get()
     async getHn(@Req() req, @Res() res,err) {
-        let allArticles : Map<string,Array<HnArticle>> = await this.hnService.getAll();
+        let allArticles : HnArticlePerDayMap = await this.hnService.getAll();
         let allTags : HnTag[] = await this.hnService.getAllTags();
-        return res.render('hn',{articles:allArticles, tags:allTags});
+        return res.render('hn',{articles:allArticles.articles, tags:allTags, backlogCount:allArticles.count});
     }
 
     @Post("/")

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { HnArticle } from './hnArticle.interface';
+import { HnArticle, HnArticlePerDayMap } from './hnArticle.interface';
 import { HnArticleAnnotationInfo } from './hnArticleAnnotationInfo.interface';
 import { ConfigService } from '../config.service';
 import { Pool } from 'pg';
@@ -21,9 +21,10 @@ export class HnService {
         this.pool = this.getPool();
     }
 
-    async getAll(): Promise<Map<string,Array<HnArticle>>> { 
+    async getAll(): Promise<HnArticlePerDayMap> { 
         let results = await this.pool.query("SELECT id,link as href,title,createtime FROM hackernewsarticles WHERE isread IS NULL AND isremoved IS NULL ORDER BY CreateTime DESC");
         let articlesForDates = new Map<string,Array<HnArticle>>();
+        let backlogCount = 0;
         results.rows.forEach(function(row){
             let article:HnArticle  = {id:row["id"], link:row["href"], title:row["title"], createTime:row["createtime"]};
             let key = article.createTime.toLocaleDateString();
@@ -31,8 +32,10 @@ export class HnService {
                 articlesForDates.set(key,new Array<HnArticle>());
             }
             articlesForDates.get(key).push(article);
+            backlogCount++;
         });
-        return articlesForDates;
+        let result:HnArticlePerDayMap = {articles:articlesForDates,count:backlogCount};
+        return result;
     }
 
     async update(query:string, args:Array<string>): Promise<boolean>{

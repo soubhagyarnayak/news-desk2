@@ -4,3 +4,8 @@ export interface HnArticle {
     title: string;
     createTime: Date;
 }
+
+export interface HnArticlePerDayMap{
+    articles: Map<string,Array<HnArticle>>;
+    count:Number;
+}
