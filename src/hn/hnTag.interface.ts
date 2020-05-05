@@ -1,4 +1,4 @@
-import { HnArticle } from "dist/src/hn/hnArticle.interface";
+import { HnArticle } from "./hnArticle.interface";
 
 export interface HnTag {
     id: string;

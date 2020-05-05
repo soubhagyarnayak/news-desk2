@@ -1,11 +1,11 @@
-let removeArticle = function removeArticle(data:any){
+let removeOpEd = function removeArticle(data:any){
     var element = document.getElementById(data.id);
     if(element != null){
         element.parentNode!.removeChild(element);
     }
 };
 
-let postData = function postData(url:string, data:any, onSuccess:Function){
+let postDataToOpEd = function postData(url:string, data:any, onSuccess:Function){
     fetch(url, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -21,19 +21,19 @@ let postData = function postData(url:string, data:any, onSuccess:Function){
     });
 };
 
-let readButtonClicked = function(event:any){
+let readPostButtonClicked = function(event:any){
     var id = event.target.parentNode.getAttribute('id');
     let data = {'operation':'markRead', 'id':id};
     postData('/oped',data,removeArticle);
 };
 
-let removeButtonClicked = function(event:any){
+let removePostButtonClicked = function(event:any){
     var id = event.target.parentNode.getAttribute('id');
     let data = {'operation':'remove', 'id':id};
     postData('/oped',data,removeArticle);
 };
 
-let addAnnotateButtonClicked = function(event:any){
+let addAnnotateToPostButtonClicked = function(event:any){
     var notesContainer = document.getElementById("notesContainer");
     if(notesContainer == null){
         return;
@@ -48,7 +48,7 @@ let addAnnotateButtonClicked = function(event:any){
         (<HTMLInputElement>document.getElementById("notes")).value ="";
     });
 };
-let annotateButtonClicked = function(event:any){
+let annotatePostButtonClicked = function(event:any){
     var id = event.target.parentNode.getAttribute('id');
     fetch(`oped/article?id=${id}`,{
         method: 'GET'
@@ -70,10 +70,10 @@ let annotateButtonClicked = function(event:any){
     });
 };
 
-let dismissAlert = function dismissAlert(){
+let dismissPostAlert = function dismissAlert(){
     document.getElementById('errorMessage')!.style.display = "none";
 };
-let dismissNotes = function dismissNotes(){
+let dismissPostNotes = function dismissNotes(){
     document.getElementById('notesContainer')!.style.display = "none";
 };
 
