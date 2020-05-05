@@ -22,7 +22,17 @@ export class HnService {
     }
 
     async getAll(): Promise<HnArticlePerDayMap> { 
-        let results = await this.pool.query("SELECT id,link as href,title,createtime FROM hackernewsarticles WHERE isread IS NULL AND isremoved IS NULL ORDER BY CreateTime DESC");
+        let query = "SELECT id,link as href,title,createtime FROM hackernewsarticles WHERE isread IS NULL AND isremoved IS NULL ORDER BY CreateTime DESC";
+        return this.getArticles(query);
+    }
+
+    async getAllArchived():Promise<HnArticlePerDayMap>{
+        let query = "SELECT id,link as href,title,createtime FROM hackernewsarticles WHERE isremoved=true ORDER BY CreateTime DESC";
+        return this.getArticles(query);
+    }
+
+    async getArticles(query:string):Promise<HnArticlePerDayMap>{
+        let results = await this.pool.query(query);
         let articlesForDates = new Map<string,Array<HnArticle>>();
         let backlogCount = 0;
         results.rows.forEach(function(row){
