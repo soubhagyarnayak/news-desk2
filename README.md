@@ -14,7 +14,7 @@ QUEUE_CONNECTION_STRING=amqp://<user>:<password>@<host>/<user>
 ```
 
 ```bash
-docker build -t newsreader . 
+docker build --label stage=trial --build-arg stage=dynamic -t newsreader . 
 
 docker run --env-file ..\env.list -p 3000:3000 -it newsreader
 ```

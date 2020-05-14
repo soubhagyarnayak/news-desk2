@@ -14,6 +14,10 @@ COPY . .
 
 RUN npm run build
 
+ARG stage=build
+
+LABEL stage=$stage
+
 FROM node:12.14.1-alpine as prod
 
 WORKDIR ./app
@@ -28,6 +32,7 @@ COPY --from=devo ./app/dist ./dist
 COPY --from=devo ./app/views ./dist/views
 COPY --from=devo ./app/public ./dist/public
 COPY --from=devo ./app/node_modules/bootstrap/dist ./dist/node_modules/bootstrap/dist
+
 
 EXPOSE 3000
 
