@@ -1,9 +1,13 @@
 {
   "name": "newsreader",
   "version": "0.0.1",
-  "description": "",
+  "description": "A website to read news articles",
   "author": "srnayak",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/soubhagyarnayak/news-desk2.git"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\"",
@@ -74,5 +78,8 @@
     },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "optionalDependencies": {
+    "fsevents": "^2.1.3"
   }
 }
