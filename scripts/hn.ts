@@ -1,6 +1,14 @@
 let removeArticle = function removeArticle(data:any){
     var element = document.getElementById(data.id);
     if(element != null){
+        var containerElement = element.closest(".articles-day-container");
+        if(containerElement != null){
+            var countElement = containerElement.querySelector(".article-day-count");
+            if(countElement!=null && countElement.textContent != null){
+                var count = parseInt(countElement.textContent);
+                countElement.textContent = String(count-1);
+            }
+        }
         element.parentNode!.removeChild(element);
     }
 };

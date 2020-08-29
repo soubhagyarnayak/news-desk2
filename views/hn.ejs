@@ -35,16 +35,18 @@
             <p class="lead">Backlog count:<%=backlogCount%></p>
         </div>
         <% for (let key of articles.keys()){%>
-            <h3><%=key%>: To Read <%=articles.get(key).length%></h3>
-            <ul>
-                <% articles.get(key).forEach(function(article){ %>
-                    <li id="<%=article.id%>"><a href="https://news.ycombinator.com/item?id=<%=article.id%>" target="_blank"><%= article.title%></a>&nbsp;
-                        <input type="button" value="Mark Read" id="rb<%= article.id%>" class="readButton btn btn-outline-dark"/>&nbsp;
-                        <input type="button" value="Remove" id="rmb<%= article.id%>" class="removeButton btn btn-outline-dark"/>&nbsp;
-                        <input type="button" value="Annotate" id="ann<%= article.id%>" class="annotateButton btn btn-outline-dark"/>&nbsp;
-                    </li>
-                <%  }); %>
-            </ul>
+            <div class="articles-day-container">
+                <h3 class="article-day-title"><%=key%>: To Read <span class="article-day-count"><%=articles.get(key).length%></span></h3>
+                <ul>
+                    <% articles.get(key).forEach(function(article){ %>
+                        <li id="<%=article.id%>"><a href="https://news.ycombinator.com/item?id=<%=article.id%>" target="_blank"><%= article.title%></a>&nbsp;
+                            <input type="button" value="Mark Read" id="rb<%= article.id%>" class="readButton btn btn-outline-dark"/>&nbsp;
+                            <input type="button" value="Remove" id="rmb<%= article.id%>" class="removeButton btn btn-outline-dark"/>&nbsp;
+                            <input type="button" value="Annotate" id="ann<%= article.id%>" class="annotateButton btn btn-outline-dark"/>&nbsp;
+                        </li>
+                    <%  }); %>
+                </ul>
+            </div>
         <%}%>
     </main>
     <script> var exports = {}; </script>
