@@ -1,10 +1,12 @@
-import { Controller, Get, Req, Res, Post } from '@nestjs/common';
+import { Controller, Get, Req, Res, Post, UseGuards } from '@nestjs/common';
+import JwtAuthGuard from 'src/auth/jwt.auth.guard';
 import { HnService } from './hn.service';
 import { HnArticlePerDayMap } from './hnArticle.interface';
 import { HnArticleAnnotationInfo } from './hnArticleAnnotationInfo.interface';
 import { HnTag, HnTagDetails } from './hnTag.interface';
 
 @Controller('hn')
+@UseGuards(JwtAuthGuard)
 export class HnController {
     constructor(private readonly hnService: HnService) {}
 
