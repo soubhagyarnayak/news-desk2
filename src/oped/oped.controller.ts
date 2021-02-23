@@ -1,9 +1,11 @@
-import { Controller, Get, Req, Res, Post } from '@nestjs/common';
+import { Controller, Get, Req, Res, Post, UseGuards } from '@nestjs/common';
 import { OpedService } from "./oped.service";
 import { OpedCategoryCollection } from "./opedCategory.interface";
 import { OpedAnnotation } from './opedAnnotation.interface';
+import JwtAuthGuard from 'src/auth/jwt.auth.guard';
 
 @Controller('oped')
+@UseGuards(JwtAuthGuard)
 export class OpedController {
     constructor(private readonly opedService: OpedService) {}
 
