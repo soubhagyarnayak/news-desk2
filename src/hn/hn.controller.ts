@@ -24,6 +24,13 @@ export class HnController {
         return res.render('hn',{articles:allArticles.articles, tags:allTags, backlogCount:allArticles.count});
     }
 
+    @Get("/read")
+    async getRead(@Req() req, @Res() res, err) {
+        let allArticles: HnArticlePerDayMap = await this.hnService.getAllRead()
+        let allTags: HnTag[] = await this.hnService.getAllTags()
+        return res.render('hn', {articles:allArticles.articles, tags:allTags, backlogCount:allArticles.count})
+    }
+
     @Post("/")
     async postHn(@Req() req, @Res() res, err){
         let query = null;
