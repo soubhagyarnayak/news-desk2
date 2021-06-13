@@ -49,7 +49,12 @@ let runCommand = function(command:any){
         headers:{
             'Content-Type': 'application/json'
         }
-    }).catch(error=>{
+    }).then(response=>{
+        if(!response.ok){
+            throw Error(response.statusText)
+        }
+    })
+    .catch(error=>{
         document.getElementById('errorMessage')!.style.display = "block";
         console.log(error);
     });

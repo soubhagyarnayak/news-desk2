@@ -22,6 +22,9 @@ let postData = function postData(url:string, data:any, onSuccess:Function){
         }
     }).then(function(response) {
         console.log(data.id);
+        if(!response.ok){
+            throw Error(response.statusText)
+        }
         onSuccess(data);
     }).catch(error => {
         console.error('Encountered error while posting data.', error);
