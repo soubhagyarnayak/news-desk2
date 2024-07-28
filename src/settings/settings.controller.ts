@@ -30,5 +30,6 @@ export class SettingsController {
 		if(!result){
 			res.status(500).send();
 		}
+        console.log(`Ran command: ${req.body.command} and got result: ${result}`);
     }
 }
