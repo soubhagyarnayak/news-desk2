@@ -1,22 +1,22 @@
-let opEdCategoryButtonClicked = function(event:any){
-    let categoryContainer = document.getElementById("categoryContainer");
+const opEdCategoryButtonClicked = function(event:any){
+    const categoryContainer = document.getElementById("categoryContainer");
     if(categoryContainer != null){
         categoryContainer.style.verticalAlign = "middle";
         categoryContainer.style.display = "block";
     }
 };
-let dismissOpEdAlert = function (){
+const dismissOpEdAlert = function (){
     document.getElementById('errorMessage')!.style.display = "none";
 };
-let dismissOpEdCategory = function (){
+const dismissOpEdCategory = function (){
     document.getElementById('categoryContainer')!.style.display = "none";
 };
-let addOpEdCategoryButtonClicked = function(event:any){
-    let categoryContainer = document.getElementById("categoryContainer");
-    let link = (<HTMLInputElement>document.getElementById("opedlink"))!.value;
-    let title = (<HTMLInputElement>document.getElementById("opedtitle"))!.value;
-    let description = (<HTMLInputElement>document.getElementById("opeddescription"))!.value;
-    let data = {'operation':'insert','link':link,'title':title,'description':description};
+const addOpEdCategoryButtonClicked = function(event:any){
+    const categoryContainer = document.getElementById("categoryContainer");
+    const link = (<HTMLInputElement>document.getElementById("opedlink"))!.value;
+    const title = (<HTMLInputElement>document.getElementById("opedtitle"))!.value;
+    const description = (<HTMLInputElement>document.getElementById("opeddescription"))!.value;
+    const data = {'operation':'insert','link':link,'title':title,'description':description};
     fetch('/oped/category', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -32,17 +32,17 @@ let addOpEdCategoryButtonClicked = function(event:any){
         console.log(error);
     });
 };
-let refreshhn = function(){
+const refreshhn = function(){
     runCommand('hnrefresh');
 };
-let refreshoped = function(){
+const refreshoped = function(){
     runCommand('opedrefresh');
 };
-let purgehn = function(){
+const purgehn = function(){
     runCommand('purgehn');
 }
-let runCommand = function(command:any){
-    var data = {'command':command};
+const runCommand = function(command:any){
+    const data = {'command':command};
     fetch('/settings/command', {
         method: 'POST',
         body: JSON.stringify(data),

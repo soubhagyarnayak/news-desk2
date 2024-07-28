@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { Pool } from 'pg'
 import { ConfigService } from '../config.service'
-import { User } from './user.interface'
 
 @Injectable()
 export class UsersService {
@@ -21,20 +20,20 @@ export class UsersService {
   }
 
   async getPassword(username: string): Promise<string | undefined> {
-    let query = 'SELECT passwordhash FROM users WHERE username=$1'
-    let args = [username]
-    let result = await this.pool.query(query, args)
-    var password = null
+    const query = 'SELECT passwordhash FROM users WHERE username=$1'
+    const args = [username]
+    const result = await this.pool.query(query, args)
+    let password = null
     if(result.rows.length>0){
-      let row = result.rows[0]
+      const row = result.rows[0]
       password = row.passwordhash
     }
     return password
   }
 
   async create(username: string, hashedPassword: string):Promise<void> {
-    let query = 'INSERT INTO users (username, passwordhash) VALUES ($1,$2)'
-    let args = [username, hashedPassword]
+    const query = 'INSERT INTO users (username, passwordhash) VALUES ($1,$2)'
+    const args = [username, hashedPassword]
     await this.pool.query(query,args)
   }
 

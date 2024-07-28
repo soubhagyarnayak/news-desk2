@@ -7,5 +7,5 @@ export interface HnArticle {
 
 export interface HnArticlePerDayMap{
     articles: Map<string,Array<HnArticle>>;
-    count:Number;
+    count:number;
 }

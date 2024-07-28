@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { connect } from 'amqplib';
 import { ConfigService } from '../config.service';
 
+type Command = 'processHN' | 'processOpEd' | 'purgeHN'
+
 @Injectable()
 export class SettingsService {
     private queueConnectionString: string;
@@ -10,11 +12,11 @@ export class SettingsService {
         this.queueConnectionString = config.get('QUEUE_CONNECTION_STRING');
     }
 
-    async runCommand(command:any):Promise<boolean>{
+    async runCommand(command:Command):Promise<boolean>{
         try {
             const connection = await connect(this.queueConnectionString);
             const channel = await connection.createChannel();
-            await channel.sendToQueue('newsparser', Buffer.from(command, 'utf-8'));
+            await channel.sendToQueue('newsparser', Buffer.from(`{"command": "${command}"}`, 'utf-8'));
         } catch (error) {
             console.log(`Encountered error:${error}`);
             return false;

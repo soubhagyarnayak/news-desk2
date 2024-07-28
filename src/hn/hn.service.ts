@@ -22,34 +22,34 @@ export class HnService {
     }
 
     async getAll(): Promise<HnArticlePerDayMap> { 
-        let query = "SELECT id,link as href,title,createtime FROM hackernewsarticles WHERE isread IS NULL AND isremoved IS NULL ORDER BY CreateTime DESC";
+        const query = "SELECT id,link as href,title,createtime FROM hackernewsarticles WHERE isread IS NULL AND isremoved IS NULL ORDER BY CreateTime DESC";
         return this.getArticles(query);
     }
 
     async getAllArchived():Promise<HnArticlePerDayMap>{
-        let query = "SELECT id,link as href,title,createtime FROM hackernewsarticles WHERE isremoved=true ORDER BY CreateTime DESC";
+        const query = "SELECT id,link as href,title,createtime FROM hackernewsarticles WHERE isremoved=true ORDER BY CreateTime DESC";
         return this.getArticles(query);
     }
 
     async getAllRead(): Promise<HnArticlePerDayMap> {
-        let query = "SELECT id,link as href,title,createtime FROM hackernewsarticles WHERE isread IS NOT NULL ORDER BY CreateTime DESC"
+        const query = "SELECT id,link as href,title,createtime FROM hackernewsarticles WHERE isread IS NOT NULL ORDER BY CreateTime DESC"
         return this.getArticles(query)
     }
 
     async getArticles(query:string):Promise<HnArticlePerDayMap>{
-        let results = await this.pool.query(query);
-        let articlesForDates = new Map<string,Array<HnArticle>>();
+        const results = await this.pool.query(query);
+        const articlesForDates = new Map<string,Array<HnArticle>>();
         let backlogCount = 0;
         results.rows.forEach(function(row){
-            let article:HnArticle  = {id:row["id"], link:row["href"], title:row["title"], createTime:row["createtime"]};
-            let key = article.createTime.toLocaleDateString();
+            const article:HnArticle  = {id:row["id"], link:row["href"], title:row["title"], createTime:row["createtime"]};
+            const key = article.createTime.toLocaleDateString();
             if(!articlesForDates.has(key)){
                 articlesForDates.set(key,new Array<HnArticle>());
             }
             articlesForDates.get(key).push(article);
             backlogCount++;
         });
-        let result:HnArticlePerDayMap = {articles:articlesForDates,count:backlogCount};
+        const result:HnArticlePerDayMap = {articles:articlesForDates,count:backlogCount};
         return result;
     }
 
@@ -64,36 +64,36 @@ export class HnService {
     }
 
     async getArticle(id:string):Promise<HnArticleAnnotationInfo>{
-        var query = "SELECT tags,notes,description FROM hackernewsarticles WHERE id=$1";
-        var args = [id];
-        var annotationInfo = null;
-        let result = await this.pool.query(query,args);
+        const query = "SELECT tags,notes,description FROM hackernewsarticles WHERE id=$1";
+        const args = [id];
+        let annotationInfo = null;
+        const result = await this.pool.query(query,args);
         if(result.rows.length>0){
-            var row = result.rows[0];
+            const row = result.rows[0];
             annotationInfo = {'tags':row.tags,'notes':row.notes,'description':row.description}; 
         }
         return annotationInfo;
     }
 
     async getAllTags(): Promise<HnTag[]> {
-        var query = "SELECT id,tag,description FROM hacker_news_tags ORDER BY tag";
-        let result = await this.pool.query(query);
-        let tags = new Array<HnTag>();
+        const query = "SELECT id,tag,description FROM hacker_news_tags ORDER BY tag";
+        const result = await this.pool.query(query);
+        const tags = new Array<HnTag>();
         result.rows.forEach(function(row){
-            let tag:HnTag  = {id:row["id"], tag:row["tag"], description:row["description"]};
+            const tag:HnTag  = {id:row["id"], tag:row["tag"], description:row["description"]};
             tags.push(tag);
         });
         return tags;
     }
 
     async getTagDetails(tagId:string): Promise<HnTagDetails> {
-        let getTagQuery = "SELECT id,tag,description FROM hacker_news_tags WHERE id=$1";
-        let result = await this.pool.query(getTagQuery,[tagId]);
+        const getTagQuery = "SELECT id,tag,description FROM hacker_news_tags WHERE id=$1";
+        const result = await this.pool.query(getTagQuery,[tagId]);
         let tagDetails:HnTagDetails = {articles:[],tag:null}
         if(result.rowCount>0){
-            let tagInstance:HnTag = {id:result.rows[0]["id"], tag:result.rows[0]["tag"], description:result.rows[0]["description"]};
-            let getArticlesQuery = "SELECT * FROM hackernewsarticles WHERE Tags LIKE $1 ORDER BY CreateTime DESC";
-            let articleResult = await this.pool.query(getArticlesQuery, [`%${tagInstance.tag}%`]);
+            const tagInstance:HnTag = {id:result.rows[0]["id"], tag:result.rows[0]["tag"], description:result.rows[0]["description"]};
+            const getArticlesQuery = "SELECT * FROM hackernewsarticles WHERE Tags LIKE $1 ORDER BY CreateTime DESC";
+            const articleResult = await this.pool.query(getArticlesQuery, [`%${tagInstance.tag}%`]);
             tagDetails = {tag:tagInstance,articles:articleResult.rows};
         }
         return tagDetails; 

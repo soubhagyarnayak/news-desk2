@@ -24,20 +24,20 @@ export class OpedService {
 
     async getAll(): Promise<OpedCategoryCollection> {
         const query = 'SELECT OpEdArticle.Id,OpEdArticle.Link AS href,OpEdArticle.Title,OpEdArticle.PublicationTime,OpEdCategory.Title AS CategoryTitle FROM OpEdArticle JOIN OpEdCategory ON OpEdArticle.CategoryId = OpEdCategory.Id WHERE IsRead IS NULL AND IsRemoved IS NULL ORDER BY PublicationTime DESC';
-        let results = await this.pool.query(query);
-        var categoriesMap = new Map<string,Array<OpedArticle>>();
+        const results = await this.pool.query(query);
+        const categoriesMap = new Map<string,Array<OpedArticle>>();
         let pending = 0;
         results.rows.forEach(function(row){
-            let article:OpedArticle  = {id:row["id"], link:row["href"], title:row["title"], pubTime:row['publicationtime']};
-            let categoryTitle:string = row["categorytitle"];
+            const article:OpedArticle  = {id:row["id"], link:row["href"], title:row["title"], pubTime:row['publicationtime']};
+            const categoryTitle:string = row["categorytitle"];
             if (!categoriesMap.has(categoryTitle)){
                 categoriesMap.set(categoryTitle, new Array<OpedArticle>());
             }
             categoriesMap.get(categoryTitle).push(article);
             pending++;
         });
-        let categories = new Array<OpedCategory>();
-        for(let key of categoriesMap.keys()){
+        const categories = new Array<OpedCategory>();
+        for(const key of categoriesMap.keys()){
             categories.push({'title':key,'articles':categoriesMap.get(key)});
         }
         return {"categories":categories, "pending":pending};
@@ -54,30 +54,30 @@ export class OpedService {
     }
 
     async markRead(id:string): Promise<boolean> {
-        let query = "UPDATE OpEdArticle SET isread = true WHERE id = $1";
-        let args = [id];
+        const query = "UPDATE OpEdArticle SET isread = true WHERE id = $1";
+        const args = [id];
         return await this.update(query, args);
     }
 
     async remove(id:string): Promise<boolean> {
-        let query = "UPDATE OpEdArticle SET isremoved = true WHERE id =$1";
-        let args = [id];
+        const query = "UPDATE OpEdArticle SET isremoved = true WHERE id =$1";
+        const args = [id];
         return await this.update(query, args);
     }
 
     async annotate(id:string, notes:string, tags:string) : Promise<boolean> {
-        let query = "UPDATE OpEdArticle SET tags = $1, notes=$2 WHERE id =$3";
-        let args = [tags,notes,id];
+        const query = "UPDATE OpEdArticle SET tags = $1, notes=$2 WHERE id =$3";
+        const args = [tags,notes,id];
         return await this.update(query,args);
     }
 
     async getArticle(id:string):Promise<OpedAnnotation>{
-        var query = "SELECT tags,notes,description FROM OpEdArticle WHERE id=$1";
-        var args = [id];
-        var annotationInfo = null;
-        let result = await this.pool.query(query,args);
+        const query = "SELECT tags,notes,description FROM OpEdArticle WHERE id=$1";
+        const args = [id];
+        let annotationInfo = null;
+        const result = await this.pool.query(query,args);
         if(result.rows.length>0){
-            var row = result.rows[0];
+            const row = result.rows[0];
             annotationInfo = {'tags':row.tags,'notes':row.notes,'description':row.description}; 
         }
         return annotationInfo;

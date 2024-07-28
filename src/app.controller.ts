@@ -8,7 +8,7 @@ export class AppController {
 
   @Get()
   //@UseGuards(AuthGuard('local'))
-  getIndex(@Req() req, @Res() res, err) {
+  getIndex(@Req() req, @Res() res) {
     return res.render('index');
   }
 

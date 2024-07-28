@@ -16,7 +16,7 @@ export class AuthService {
         private readonly configService: ConfigService
     ) {}
 
-    async validateUser(username: string, pass: string): Promise<any> {
+    async validateUser(username: string, pass: string): Promise<string> {
         try {
             const password = await this.usersService.getPassword(username)
             const isValidPassword = await bcrypt.compare(pass,password)
@@ -27,7 +27,7 @@ export class AuthService {
             console.log(error)
             throw new HttpException('Wrong credentials provided', HttpStatus.BAD_REQUEST);
         }
-        return {username: username}
+        return username;
     }
 
     async register(user: User) {

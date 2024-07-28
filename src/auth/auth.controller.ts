@@ -27,7 +27,7 @@ export class AuthController {
   }
 
   @Get()
-  async getLogInPage(@Req() req, @Res() res,err) {
+  async getLogInPage(@Req() req, @Res() res) {
     return res.render('login',{});
   }
 

@@ -10,15 +10,15 @@ export class OpedController {
     constructor(private readonly opedService: OpedService) {}
 
     @Get()
-    async getOped(@Req() req, @Res() res,err) {
-        let categories : OpedCategoryCollection = await this.opedService.getAll();
+    async getOped(@Req() req, @Res() res) {
+        const categories : OpedCategoryCollection = await this.opedService.getAll();
         console.log(categories);
         console.log(categories.pending);
         res.render('oped',{categories:categories.categories,pending:categories.pending});
     }
 
     @Post("/")
-    async postHn(@Req() req, @Res() res, err){
+    async postHn(@Req() req, @Res() res){
         let result:boolean = false;
         if(req.body.operation == 'markRead'){
             result = await this.opedService.markRead(req.body.id);
@@ -37,8 +37,8 @@ export class OpedController {
     }
 
     @Get("/article")
-    async getArticle(@Req() req, @Res() res,err){
-        let annotation:OpedAnnotation = await this.opedService.getArticle(req.query.id);
+    async getArticle(@Req() req, @Res() res){
+        const annotation:OpedAnnotation = await this.opedService.getArticle(req.query.id);
         if(annotation == null){
             res.status(500).send("Error");
         }

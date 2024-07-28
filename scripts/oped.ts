@@ -1,11 +1,11 @@
-let removeOpEd = function removeArticle(data:any){
-    var element = document.getElementById(data.id);
+const removeOpEd = function removeArticle(data:any){
+    const element = document.getElementById(data.id);
     if(element != null){
         element.parentNode!.removeChild(element);
     }
 };
 
-let postDataToOpEd = function postData(url:string, data:any, onSuccess:Function){
+const postDataToOpEd = function postData(url:string, data:any, onSuccess:Function){
     fetch(url, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -21,41 +21,41 @@ let postDataToOpEd = function postData(url:string, data:any, onSuccess:Function)
     });
 };
 
-let readPostButtonClicked = function(event:any){
-    var id = event.target.parentNode.getAttribute('id');
-    let data = {'operation':'markRead', 'id':id};
+const readPostButtonClicked = function(event:any){
+    const id = event.target.parentNode.getAttribute('id');
+    const data = {'operation':'markRead', 'id':id};
     postData('/oped',data,removeArticle);
 };
 
-let removePostButtonClicked = function(event:any){
-    var id = event.target.parentNode.getAttribute('id');
-    let data = {'operation':'remove', 'id':id};
+const removePostButtonClicked = function(event:any){
+    const id = event.target.parentNode.getAttribute('id');
+    const data = {'operation':'remove', 'id':id};
     postData('/oped',data,removeArticle);
 };
 
-let addAnnotateToPostButtonClicked = function(event:any){
-    var notesContainer = document.getElementById("notesContainer");
+const addAnnotateToPostButtonClicked = function(event:any){
+    const notesContainer = document.getElementById("notesContainer");
     if(notesContainer == null){
         return;
     }
-    var id = notesContainer.getAttribute("associatedId");
-    var tags = (<HTMLInputElement>document.getElementById("tags")).value;
-    var notes = (<HTMLInputElement>document.getElementById("notes")).value;
-    let data = {'operation':'annotate', 'id':id, 'tags':tags, 'notes':notes};
+    const id = notesContainer.getAttribute("associatedId");
+    const tags = (<HTMLInputElement>document.getElementById("tags")).value;
+    const notes = (<HTMLInputElement>document.getElementById("notes")).value;
+    const data = {'operation':'annotate', 'id':id, 'tags':tags, 'notes':notes};
     postData('/oped',data,()=>{
         notesContainer!.style.display = "none";
         (<HTMLInputElement>document.getElementById("tags")).value = "";
         (<HTMLInputElement>document.getElementById("notes")).value ="";
     });
 };
-let annotatePostButtonClicked = function(event:any){
-    var id = event.target.parentNode.getAttribute('id');
+const annotatePostButtonClicked = function(event:any){
+    const id = event.target.parentNode.getAttribute('id');
     fetch(`oped/article?id=${id}`,{
         method: 'GET'
     }).then(function(response){
         return response.json();
     }).then(function(data){
-        var notesContainer = document.getElementById("notesContainer");
+        const notesContainer = document.getElementById("notesContainer");
         if(notesContainer != null){
             notesContainer.style.verticalAlign = "middle";
             notesContainer.style.display = "block";
@@ -70,28 +70,28 @@ let annotatePostButtonClicked = function(event:any){
     });
 };
 
-let dismissPostAlert = function dismissAlert(){
+const dismissPostAlert = function dismissAlert(){
     document.getElementById('errorMessage')!.style.display = "none";
 };
-let dismissPostNotes = function dismissNotes(){
+const dismissPostNotes = function dismissNotes(){
     document.getElementById('notesContainer')!.style.display = "none";
 };
 
 document.addEventListener("DOMContentLoaded", function(event){
     document.getElementById("addAnnotationButton")!.addEventListener("click",addAnnotateButtonClicked);
-    let markReadButtons = document.querySelectorAll("input.readButton");
+    const markReadButtons = document.querySelectorAll("input.readButton");
     markReadButtons.forEach(function(markReadButton:Element){
         markReadButton.addEventListener("click", readButtonClicked);
     });
-    let removeButtons = document.querySelectorAll("input.removeButton");
+    const removeButtons = document.querySelectorAll("input.removeButton");
     removeButtons.forEach(function(removeButton:Element){
         removeButton.addEventListener("click", removeButtonClicked);
     });
-    let annotateButtons = document.querySelectorAll("input.annotateButton");
+    const annotateButtons = document.querySelectorAll("input.annotateButton");
     annotateButtons.forEach(function(annotateButton:Element){
         annotateButton.addEventListener("click", annotateButtonClicked);
     });
-    let archiveButtons = document.querySelectorAll("input.archiveButton");
+    const archiveButtons = document.querySelectorAll("input.archiveButton");
     archiveButtons.forEach(function(archiveButton:Element){
         archiveButton.addEventListener("click", archiveButtonClicked);
     });

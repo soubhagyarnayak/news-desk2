@@ -20,9 +20,8 @@ describe('AppController', () => {
       const res = {
         render: jest.fn(),
       }
-      const err = null;
       
-      appController.getIndex(req, res, err);
+      appController.getIndex(req, res);
 
       expect(res.render).toHaveBeenCalledWith('index');
     });
