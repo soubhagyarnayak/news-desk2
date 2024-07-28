@@ -1,0 +1,22 @@
+{
+    "moduleFileExtensions": [
+        "js",
+        "json",
+        "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".spec.ts$",
+    "transform": {
+        "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node",
+    "coverageThreshold": {
+        "global": {
+            "branches": 0,
+            "functions": 28,
+            "lines": 32,
+            "statements": 35
+        }
+    }
+}
