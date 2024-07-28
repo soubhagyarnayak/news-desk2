@@ -1,4 +1,7 @@
 # news-desk2
+
+[![Node.js CI](https://github.com/soubhagyarnayak/news-desk2/actions/workflows/node.js.yml/badge.svg)](https://github.com/soubhagyarnayak/news-desk2/actions/workflows/node.js.yml)
+
 A web app to read and annotate news articles
 
 ## Docker commands
