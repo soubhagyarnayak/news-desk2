@@ -1,5 +1,5 @@
 import { Controller, Get, Req, Res, Post, UseGuards } from '@nestjs/common';
-import JwtAuthGuard from 'src/auth/jwt.auth.guard';
+import JwtAuthGuard from '../auth/jwt.auth.guard';
 import { HnService } from './hn.service';
 import { HnArticlePerDayMap } from './hnArticle.interface';
 import { HnArticleAnnotationInfo } from './hnArticleAnnotationInfo.interface';

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { Pool } from 'pg'
-import { ConfigService } from 'src/config.service'
+import { ConfigService } from '../config.service'
 import { User } from './user.interface'
 
 @Injectable()

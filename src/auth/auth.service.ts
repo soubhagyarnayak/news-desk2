@@ -3,9 +3,9 @@ import { UsersService } from '../users/users.service'
 import * as bcrypt from 'bcrypt'
 import { HttpException } from '@nestjs/common'
 import { HttpStatus } from '@nestjs/common'
-import { User } from 'src/users/user.interface'
+import { User } from '../users/user.interface'
 import { JwtService } from '@nestjs/jwt'
-import { ConfigService } from 'src/config.service'
+import { ConfigService } from '../config.service'
 import { TokenPayload } from './tokenPayload.interface'
 
 @Injectable()

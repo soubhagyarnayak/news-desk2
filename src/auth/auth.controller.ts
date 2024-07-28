@@ -2,7 +2,7 @@ import { Body, Req, Controller, HttpCode, Post, UseGuards, Res, Get } from '@nes
 import { AuthService } from './auth.service'
 import RequestWithUser from './requestWithUser.interface';
 import { LocalAuthenticationGuard } from './local.auth.guard';
-import { User } from 'src/users/user.interface';
+import { User } from '../users/user.interface';
 
 @Controller('authentication')
 export class AuthController {

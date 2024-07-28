@@ -14,9 +14,17 @@ describe('AppController', () => {
     appController = app.get<AppController>(AppController);
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+  describe('getIndex', () => {
+    it('should render the index page', () => {
+      const req = {};
+      const res = {
+        render: jest.fn(),
+      }
+      const err = null;
+      
+      appController.getIndex(req, res, err);
+
+      expect(res.render).toHaveBeenCalledWith('index');
     });
   });
 });
