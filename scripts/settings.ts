@@ -1,4 +1,4 @@
-const opEdCategoryButtonClicked = function(event:any){
+const opEdCategoryButtonClicked = function(){
     const categoryContainer = document.getElementById("categoryContainer");
     if(categoryContainer != null){
         categoryContainer.style.verticalAlign = "middle";
@@ -11,8 +11,7 @@ const dismissOpEdAlert = function (){
 const dismissOpEdCategory = function (){
     document.getElementById('categoryContainer')!.style.display = "none";
 };
-const addOpEdCategoryButtonClicked = function(event:any){
-    const categoryContainer = document.getElementById("categoryContainer");
+const addOpEdCategoryButtonClicked = function(){
     const link = (<HTMLInputElement>document.getElementById("opedlink"))!.value;
     const title = (<HTMLInputElement>document.getElementById("opedtitle"))!.value;
     const description = (<HTMLInputElement>document.getElementById("opeddescription"))!.value;
@@ -23,7 +22,7 @@ const addOpEdCategoryButtonClicked = function(event:any){
         headers:{
             'Content-Type': 'application/json'
         }
-    }).then(function (response){
+    }).then(function (){
         document.getElementById("categoryContainer")!.style.display = "none";
         (<HTMLInputElement>document.getElementById("opedlink"))!.value = "";
         (<HTMLInputElement>document.getElementById("opedtitle"))!.value = "";
@@ -41,7 +40,7 @@ const refreshoped = function(){
 const purgehn = function(){
     runCommand('purgehn');
 }
-const runCommand = function(command:any){
+const runCommand = function(command:string){
     const data = {'command':command};
     fetch('/settings/command', {
         method: 'POST',
@@ -60,7 +59,7 @@ const runCommand = function(command:any){
     });
 };
 
-document.addEventListener("DOMContentLoaded", function(event:any){
+document.addEventListener("DOMContentLoaded", function(){
     console.log("DOMContentLoaded");
     document.getElementById("errorMessage")!.addEventListener("click",dismissOpEdAlert);
     document.getElementById("addoped")!.addEventListener("click",opEdCategoryButtonClicked);

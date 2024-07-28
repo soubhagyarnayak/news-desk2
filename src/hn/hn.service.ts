@@ -54,7 +54,7 @@ export class HnService {
     }
 
     async update(query:string, args:Array<string>): Promise<boolean>{
-        this.pool.query(query,args,function(err,result){
+        this.pool.query(query,args,function(err){
             if(err){
                 console.log(err);
                 return false;

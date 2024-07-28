@@ -1,4 +1,13 @@
-const removeArticle = function removeArticle(data:any){
+type Data = {
+    'id': string,
+    'operation': Operation,
+};
+
+type Operation = 'markRead' | 'remove' | 'archive' | 'annotate';
+
+type SuccessResponseHandler = (data: Data) => void;
+
+const removeArticle = function removeArticle(data:Data){
     const element = document.getElementById(data.id);
     if(element != null){
         const containerElement = element.closest(".articles-day-container");
@@ -13,7 +22,7 @@ const removeArticle = function removeArticle(data:any){
     }
 };
 
-const postData = function postData(url:string, data:any, onSuccess:Function){
+const postData = function postData(url:string, data:Data, onSuccess:SuccessResponseHandler){
     fetch(url, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -32,39 +41,46 @@ const postData = function postData(url:string, data:any, onSuccess:Function){
     });
 };
 
-const readButtonClicked = function(event:any){
-    const id = event.target.parentNode.getAttribute('id');
-    const data = {'operation':'markRead', 'id':id};
+const getAssociatedId= function(event: Event): string {
+    const target = event.target as HTMLButtonElement;
+    const parentElement = target.parentNode as HTMLElement;
+    const id = parentElement.getAttribute('id') as string;
+    return id;
+}
+
+const readButtonClicked = function(event: Event){
+    const id = getAssociatedId(event);
+    const data = {'operation':'markRead' as Operation, 'id':id};
     postData('/hn',data,removeArticle);
 };
 
-const removeButtonClicked = function(event:any){
-    const id = event.target.parentNode.getAttribute('id');
-    const data = {'operation':'remove', 'id':id};
+const removeButtonClicked = function(event: Event){
+    const id = getAssociatedId(event);
+    const data = {'operation':'remove' as Operation, 'id':id};
     postData('/hn',data,removeArticle);
 };
-const archiveButtonClicked = function(event:any){
-    const id = event.target.parentNode.getAttribute('id');
-    const data = {'operation':'archive', 'id':id, 'url':"https://news.ycombinator.com/item?id="+id};
+const archiveButtonClicked = function(event: Event){
+    const id = getAssociatedId(event);
+    const data = {'operation':'archive' as Operation, 'id':id, 'url':"https://news.ycombinator.com/item?id="+id};
     postData('/hn',data,()=>{});
 }
-const addAnnotateButtonClicked = function(event:any){
+const addAnnotateButtonClicked = function(){
     const notesContainer = document.getElementById("notesContainer");
     if(notesContainer == null){
         return;
     }
-    const id = notesContainer.getAttribute("associatedId");
+    const id = notesContainer.getAttribute("associatedId") as string;
     const tags = (<HTMLInputElement>document.getElementById("tags")).value;
     const notes = (<HTMLInputElement>document.getElementById("notes")).value;
-    const data = {'operation':'annotate', 'id':id, 'tags':tags, 'notes':notes};
+    const data = {'operation':'annotate' as Operation, 'id':id, 'tags':tags, 'notes':notes};
     postData('/hn',data,()=>{
         notesContainer!.style.display = "none";
         (<HTMLInputElement>document.getElementById("tags")).value = "";
         (<HTMLInputElement>document.getElementById("notes")).value ="";
     });
 };
-const annotateButtonClicked = function(event:any){
-    const id = event.target.parentNode.getAttribute('id');
+const annotateButtonClicked = function(event: Event){
+    const id = getAssociatedId(event);
     fetch(`hn/article?id=${id}`,{
         method: 'GET'
     }).then(function(response){
@@ -92,16 +108,17 @@ const dismissNotes = function dismissNotes(){
     document.getElementById('notesContainer')!.style.display = "none";
 };
 
-const tagKeyDown = function tagKeyDown(event:any){
-    if( event.isComposing || event.keyCode == 229){
+const tagKeyDown = function tagKeyDown(event: KeyboardEvent){
+    if( event.isComposing || event.key == 'Process'){
         return;
     }
-    const text = event.target.value;
-    const tags:string = event.target.getAttribute("data-tags");
+    const target = event.target as HTMLTextAreaElement;
+    const text = target.value as string;
+    const tags:string = target.getAttribute("data-tags") as string;
     document.getElementById("availableTags")!.textContent = tags.split(",").filter(x=>x.startsWith(text)).join(",");
 }
 
-document.addEventListener("DOMContentLoaded", function(event){
+document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("addAnnotationButton")!.addEventListener("click",addAnnotateButtonClicked);
     const markReadButtons = document.querySelectorAll("input.readButton");
     markReadButtons.forEach(function(markReadButton:Element){
