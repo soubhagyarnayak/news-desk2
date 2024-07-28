@@ -11,16 +11,14 @@ export class SettingsService {
     }
 
     async runCommand(command:any):Promise<boolean>{
-        connect(this.queueConnectionString)
-        .then(connection => {
-            connection.createChannel()
-                .tap(channel => channel.checkQueue('newsparser'))
-                .then(channel => channel.sendToQueue('newsparser', new Buffer(command)))
-                .finally(() => setTimeout(function() { connection.close();}, 500));
-        }).error(function(reason:any){
-            console.log(`Encountered error:${reason}`);
+        try {
+            const connection = await connect(this.queueConnectionString);
+            const channel = await connection.createChannel();
+            await channel.sendToQueue('newsparser', Buffer.from(command, 'utf-8'));
+        } catch (error) {
+            console.log(`Encountered error:${error}`);
             return false;
-        });
+        }
         return true;
     }
 }
