@@ -10,22 +10,21 @@ import { ConfigService } from '../config.service';
 
 @Module({
   imports: [
-    UsersModule, 
+    UsersModule,
     PassportModule,
     ConfigModule,
-    JwtModule.registerAsync(
-      {
-        imports: [ConfigModule],
-        useFactory: async (configService: ConfigService) => ({
-          secret: configService.get('JWT_SECRET'),
-          signOptions: {
-            expiresIn: `${configService.get('JWT_EXPIRATION_TIME')}s`
-          }
-        }),
-        inject: [ConfigService],
-      })
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('JWT_SECRET'),
+        signOptions: {
+          expiresIn: `${configService.get('JWT_EXPIRATION_TIME')}s`,
+        },
+      }),
+      inject: [ConfigService],
+    }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
-  exports: [AuthService, JwtModule]
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

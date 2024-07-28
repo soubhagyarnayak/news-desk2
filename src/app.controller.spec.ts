@@ -19,8 +19,8 @@ describe('AppController', () => {
       const req = {};
       const res = {
         render: jest.fn(),
-      }
-      
+      };
+
       appController.getIndex(req, res);
 
       expect(res.render).toHaveBeenCalledWith('index');
