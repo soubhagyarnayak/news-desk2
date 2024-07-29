@@ -16,7 +16,7 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async validateUser(username: string, pass: string): Promise<string> {
+  async validateUser(username: string, pass: string): Promise<User> {
     try {
       const password = await this.usersService.getPassword(username);
       const isValidPassword = await bcrypt.compare(pass, password);
@@ -33,7 +33,7 @@ export class AuthService {
         HttpStatus.BAD_REQUEST,
       );
     }
-    return username;
+    return { username: username, password: pass };
   }
 
   async register(user: User) {

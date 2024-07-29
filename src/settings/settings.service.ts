@@ -20,6 +20,7 @@ export class SettingsService {
         'newsparser',
         Buffer.from(`{"command": "${command}"}`, 'utf-8'),
       );
+      await connection.close();
     } catch (error) {
       console.log(`Encountered error:${error}`);
       return false;
