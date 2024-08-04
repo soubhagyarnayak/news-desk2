@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { connect } from 'amqplib';
+import { Channel, Connection, connect } from 'amqplib';
 import { ConfigService } from '../config.service';
 
 type Command = 'processHN' | 'processOpEd' | 'purgeHN';
@@ -13,17 +13,20 @@ export class SettingsService {
   }
 
   async runCommand(command: Command): Promise<boolean> {
+    let connection: Connection, channel: Channel;
     try {
-      const connection = await connect(this.queueConnectionString);
-      const channel = await connection.createChannel();
+      connection = await connect(this.queueConnectionString);
+      channel = await connection.createChannel();
       await channel.sendToQueue(
         'newsparser',
         Buffer.from(`{"command": "${command}"}`, 'utf-8'),
       );
-      await connection.close();
     } catch (error) {
       console.log(`Encountered error:${error}`);
       return false;
+    } finally {
+      await channel.close();
+      await connection.close();
     }
     return true;
   }
