@@ -16,9 +16,9 @@ import { ConfigService } from '../config.service';
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('JWT_SECRET'),
+        secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: `${configService.get('JWT_EXPIRATION_TIME')}s`,
+          expiresIn: configService.get<number>('JWT_EXPIRATION_TIME'),
         },
       }),
       inject: [ConfigService],

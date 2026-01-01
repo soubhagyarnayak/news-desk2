@@ -10,10 +10,10 @@ export class ConfigService {
     }
   }
 
-  get(key: string): string {
+  get<T>(key: string): T {
     if (this.envConfig) {
-      return this.envConfig[key];
+      return this.envConfig[key] as T;
     }
-    return process.env[key];
+    return process.env[key] as T;
   }
 }
