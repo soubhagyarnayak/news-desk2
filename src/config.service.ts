@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 
-import { Pool } from 'pg';
+import { Pool, PoolConfig } from 'pg';
 
 export class ConfigService {
   private readonly envConfig: { [key: string]: string };
@@ -20,26 +20,26 @@ export class ConfigService {
   }
 
   getPool() {
-    let pool = new Pool({
-      user: this.get('DB_USER'),
-      password: this.get('DB_PASSWORD'),
-      host: this.get('DB_HOST'),
-      database: this.get('DB_DATABASE'),
-    });
+    const config:PoolConfig = {
+      user: this.get<string>('DB_USER'),
+      password: this.get<string>('DB_PASSWORD'),
+      host: this.get<string>('DB_HOST'),
+      database: this.get<string>('DB_DATABASE'),
+    };
 
     const port = this.get<number>('DB_PORT');
     if (port) {
-      pool.options.port = port;
+      config.port = port;
     }
 
     const certificateFilePath = this.get<string>('DB_CERTIFICATE_PATH');
     if (certificateFilePath) {
-      pool.options.ssl = {
+      config.ssl = {
         ca: fs.readFileSync(certificateFilePath).toString(),
         rejectUnauthorized: true,
       }
     }
 
-    return pool;
+    return new Pool(config);
   }
 }
