@@ -14,11 +14,7 @@ export class OpedService {
   private pool: Pool;
 
   constructor(config: ConfigService) {
-    this.user = config.get('DB_USER');
-    this.password = config.get('DB_PASSWORD');
-    this.host = config.get('DB_HOST');
-    this.database = config.get('DB_DATABASE');
-    this.pool = this.getPool();
+    this.pool = config.getPool();
   }
 
   async getAll(): Promise<OpedCategoryCollection> {
@@ -90,14 +86,5 @@ export class OpedService {
       };
     }
     return annotationInfo;
-  }
-
-  private getPool(): Pool {
-    return new Pool({
-      user: this.user,
-      password: this.password,
-      host: this.host,
-      database: this.database,
-    });
   }
 }
