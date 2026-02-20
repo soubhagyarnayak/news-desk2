@@ -1,8 +1,7 @@
-import { Injectable } from '@nestjs/common';
+// Removed Nest `@Injectable` decorator — plain class
 import { Pool } from 'pg';
 import { ConfigService } from '../config.service';
 
-@Injectable()
 export class UsersService {
   private user: string;
   private password: string;

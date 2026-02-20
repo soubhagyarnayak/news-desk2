@@ -1,16 +1,12 @@
-import { Controller, Get, Req, Res, Post, UseGuards } from '@nestjs/common';
 import { OpedService } from './oped.service';
 import { OpedCategoryCollection } from './opedCategory.interface';
 import { OpedAnnotation } from './opedAnnotation.interface';
-import JwtAuthGuard from '../auth/jwt.auth.guard';
 
-@Controller('oped')
-@UseGuards(JwtAuthGuard)
+// Legacy Nest controller converted to plain class; Express routes exist in `src/routes/oped.routes.ts`.
 export class OpedController {
   constructor(private readonly opedService: OpedService) {}
 
-  @Get()
-  async getOped(@Req() req, @Res() res) {
+  async getOped(req: any, res: any) {
     const categories: OpedCategoryCollection = await this.opedService.getAll();
     console.log(categories);
     console.log(categories.pending);
@@ -20,8 +16,7 @@ export class OpedController {
     });
   }
 
-  @Post('/')
-  async postHn(@Req() req, @Res() res) {
+  async postHn(req: any, res: any) {
     let result: boolean = false;
     if (req.body.operation == 'markRead') {
       result = await this.opedService.markRead(req.body.id);
@@ -41,8 +36,7 @@ export class OpedController {
     }
   }
 
-  @Get('/article')
-  async getArticle(@Req() req, @Res() res) {
+  async getArticle(req: any, res: any) {
     const annotation: OpedAnnotation = await this.opedService.getArticle(
       req.query.id,
     );

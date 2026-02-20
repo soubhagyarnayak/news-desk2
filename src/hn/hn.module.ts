@@ -1,12 +1,4 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '../config.module';
 import { HnService } from './hn.service';
-import { HnController } from './hn.controller';
 
-@Module({
-  imports: [ConfigModule],
-  providers: [HnService],
-  controllers: [HnController],
-  exports: [HnService],
-})
-export class UsersModule {}
+// HnModule removed — HnService is instantiated directly in Express routes.
+export class HnModule {}

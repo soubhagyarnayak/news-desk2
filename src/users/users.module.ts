@@ -1,10 +1,5 @@
-import { Module } from '@nestjs/common';
 import { ConfigModule } from '../config.module';
 import { UsersService } from './users.service';
 
-@Module({
-  imports: [ConfigModule],
-  providers: [UsersService],
-  exports: [UsersService],
-})
+// UsersModule removed — use UsersService instances directly where needed.
 export class UsersModule {}

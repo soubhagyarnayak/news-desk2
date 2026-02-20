@@ -1,11 +1,10 @@
-import { Injectable } from '@nestjs/common';
+// Removed Nest `@Injectable` decorator — plain class
 import { OpedArticle } from './opedArticle.interface';
 import { OpedCategory, OpedCategoryCollection } from './opedCategory.interface';
 import { OpedAnnotation } from './opedAnnotation.interface';
 import { ConfigService } from '../config.service';
 import { Pool } from 'pg';
 
-@Injectable()
 export class OpedService {
   private user: string;
   private password: string;

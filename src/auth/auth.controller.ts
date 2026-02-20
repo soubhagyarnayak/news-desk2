@@ -1,31 +1,14 @@
-import {
-  Body,
-  Req,
-  Controller,
-  HttpCode,
-  Post,
-  UseGuards,
-  Res,
-  Get,
-} from '@nestjs/common';
 import { AuthService } from './auth.service';
-import RequestWithUser from './requestWithUser.interface';
-import { LocalAuthenticationGuard } from './local.auth.guard';
-import { User } from '../users/user.interface';
 
-@Controller('authentication')
+// Legacy Nest controller converted to plain class; routing handled in Express.
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
-  async register(@Body() user: User) {
+  async register(user: any) {
     return this.authService.register(user);
   }
 
-  @HttpCode(200)
-  @UseGuards(LocalAuthenticationGuard)
-  @Post('log-in')
-  async logIn(@Req() request: RequestWithUser, @Res() response) {
+  async logIn(request: any, response: any) {
     const user = request.user;
     const cookie = this.authService.getCookieWithJwtToken(user.username);
     response.setHeader('Set-Cookie', cookie);
@@ -33,8 +16,7 @@ export class AuthController {
     return response.send(user);
   }
 
-  @Get()
-  async getLogInPage(@Req() req, @Res() res) {
+  async getLogInPage(req: any, res: any) {
     return res.render('login', {});
   }
 }

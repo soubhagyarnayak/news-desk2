@@ -1,17 +1,11 @@
-import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
-import JwtAuthGuard from '../auth/jwt.auth.guard';
 import { SettingsService } from './settings.service';
 
-@Controller('settings')
-@UseGuards(JwtAuthGuard)
 export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}
-  @Get()
-  async getHn(@Req() req, @Res() res) {
+  async getHn(req: any, res: any) {
     return res.render('settings');
   }
-  @Post('command')
-  async command(@Req() req, @Res() res) {
+  async command(req: any, res: any) {
     let result = true;
     console.log(`Trying to run command:${req.body.command}`);
     if (req.body.command == 'hnrefresh') {
@@ -23,6 +17,7 @@ export class SettingsController {
     } else {
       console.log(`Command ${req.body.command} is not currently supported.`);
       res.status(400).send();
+      return;
     }
     console.log(`Ran command: ${req.body.command} and got result: ${result}`);
     if (!result) {

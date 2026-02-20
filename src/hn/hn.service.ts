@@ -1,11 +1,9 @@
-import { Injectable } from '@nestjs/common';
 import { HnArticle, HnArticlePerDayMap } from './hnArticle.interface';
 import { HnArticleAnnotationInfo } from './hnArticleAnnotationInfo.interface';
 import { ConfigService } from '../config.service';
 import { Pool } from 'pg';
 import { HnTag, HnTagDetails } from './hnTag.interface';
 
-@Injectable()
 export class HnService {
   private user: string;
   private password: string;

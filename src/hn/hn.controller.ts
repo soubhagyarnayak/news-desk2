@@ -1,17 +1,13 @@
-import { Controller, Get, Req, Res, Post, UseGuards } from '@nestjs/common';
-import JwtAuthGuard from '../auth/jwt.auth.guard';
 import { HnService } from './hn.service';
 import { HnArticlePerDayMap } from './hnArticle.interface';
 import { HnArticleAnnotationInfo } from './hnArticleAnnotationInfo.interface';
 import { HnTag, HnTagDetails } from './hnTag.interface';
 
-@Controller('hn')
-@UseGuards(JwtAuthGuard)
+// Legacy Nest controller converted to plain class; Express routes live in src/routes/hn.routes.ts
 export class HnController {
   constructor(private readonly hnService: HnService) {}
 
-  @Get()
-  async getHn(@Req() req, @Res() res) {
+  async getHn(req: any, res: any) {
     const allArticles: HnArticlePerDayMap = await this.hnService.getAll();
     const allTags: HnTag[] = await this.hnService.getAllTags();
     return res.render('hn', {
@@ -21,8 +17,7 @@ export class HnController {
     });
   }
 
-  @Get('/archived')
-  async getArchived(@Req() req, @Res() res) {
+  async getArchived(req: any, res: any) {
     const allArticles: HnArticlePerDayMap =
       await this.hnService.getAllArchived();
     const allTags: HnTag[] = await this.hnService.getAllTags();
@@ -33,8 +28,7 @@ export class HnController {
     });
   }
 
-  @Get('/read')
-  async getRead(@Req() req, @Res() res) {
+  async getRead(req: any, res: any) {
     const allArticles: HnArticlePerDayMap = await this.hnService.getAllRead();
     const allTags: HnTag[] = await this.hnService.getAllTags();
     return res.render('hn', {
@@ -44,8 +38,7 @@ export class HnController {
     });
   }
 
-  @Post('/')
-  async postHn(@Req() req, @Res() res) {
+  async postHn(req: any, res: any) {
     let query = null;
     let args = [];
     if (req.body.operation == 'markRead') {
@@ -66,8 +59,7 @@ export class HnController {
     }
   }
 
-  @Get('/article')
-  async getHnArticle(@Req() req, @Res() res) {
+  async getHnArticle(req: any, res: any) {
     const annotationInfo: HnArticleAnnotationInfo =
       await this.hnService.getArticle(req.query.id);
     if (annotationInfo == null) {
@@ -77,14 +69,12 @@ export class HnController {
     }
   }
 
-  @Get('/tags')
-  async getTags(@Req() req, @Res() res) {
+  async getTags(req: any, res: any) {
     const tags: HnTag[] = await this.hnService.getAllTags();
     return res.render('tags', { tags: tags });
   }
 
-  @Get('/tags/:tagId')
-  async getTag(@Req() req, @Res() res) {
+  async getTag(req: any, res: any) {
     const hnTagDetails: HnTagDetails = await this.hnService.getTagDetails(
       req.params.tagId,
     );

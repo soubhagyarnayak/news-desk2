@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+// Removed Nest `@Injectable` decorator — plain class
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
 import { HttpException } from '@nestjs/common';
@@ -8,7 +8,6 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '../config.service';
 import { TokenPayload } from './tokenPayload.interface';
 
-@Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,

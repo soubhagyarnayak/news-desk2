@@ -10,7 +10,7 @@
     "target": "es2018",
     "strict": true,
     "module": "commonjs",
-    "moduleResolution": "classic",
+    "moduleResolution": "node",
     "outDir": "../public/scripts",
     "sourceMap": true
   },
