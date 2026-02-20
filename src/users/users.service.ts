@@ -1,4 +1,3 @@
-// Removed Nest `@Injectable` decorator — plain class
 import { Pool } from 'pg';
 import { ConfigService } from '../config.service';
 

@@ -1,4 +1,3 @@
-// Removed Nest `@Injectable` decorator — plain class
 import { Channel, Connection, connect } from 'amqplib';
 import { ConfigService } from '../config.service';
 

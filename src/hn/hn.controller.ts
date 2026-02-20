@@ -3,7 +3,6 @@ import { HnArticlePerDayMap } from './hnArticle.interface';
 import { HnArticleAnnotationInfo } from './hnArticleAnnotationInfo.interface';
 import { HnTag, HnTagDetails } from './hnTag.interface';
 
-// Legacy Nest controller converted to plain class; Express routes live in src/routes/hn.routes.ts
 export class HnController {
   constructor(private readonly hnService: HnService) {}
 

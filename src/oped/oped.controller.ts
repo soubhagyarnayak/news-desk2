@@ -2,7 +2,6 @@ import { OpedService } from './oped.service';
 import { OpedCategoryCollection } from './opedCategory.interface';
 import { OpedAnnotation } from './opedAnnotation.interface';
 
-// Legacy Nest controller converted to plain class; Express routes exist in `src/routes/oped.routes.ts`.
 export class OpedController {
   constructor(private readonly opedService: OpedService) {}
 
