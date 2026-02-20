@@ -24,12 +24,6 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@nestjs/common": "^11.1.11",
-    "@nestjs/config": "^4.0.3",
-    "@nestjs/core": "^11.1.11",
-    "@nestjs/jwt": "^11.0.2",
-    "@nestjs/passport": "^11.0.5",
-    "@nestjs/platform-express": "^11.1.11",
     "amqplib": "^0.10.9",
     "axios": "^1.13.5",
     "bcrypt": "^6.0.0",
@@ -50,7 +44,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@nestjs/testing": "^11.1.11",
     "@types/amqplib": "^0.10.5",
     "@types/bcrypt": "^5.0.2",
     "@types/dotenv": "^6.1.1",
