@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+    <%- include ('partials/head') %>
+    <title>RSS Feeds</title>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">News Desk</a>
+            <a class="btn btn-outline-light btn-sm" href="/settings">← Settings</a>
+        </div>
+    </nav>
+    <div class="container py-4">
+        <main>
+            <div class="d-flex align-items-baseline gap-3 pb-3 mb-4 border-bottom">
+                <h1 class="h3 mb-0">RSS Feeds</h1>
+                <span class="text-muted"><span class="badge bg-secondary"><%=feeds.length%></span> configured</span>
+            </div>
+
+            <div id="errorMessage" style="display:none" class="alert alert-danger">
+                <strong>Error!</strong> A problem occurred while submitting your data.
+                <button type="button" class="btn-close float-end" id="errorClose" aria-label="Close"></button>
+            </div>
+
+            <div id="successMessage" style="display:none" class="alert alert-success">
+                Feed refresh enqueued successfully.
+                <button type="button" class="btn-close float-end" id="successClose" aria-label="Close"></button>
+            </div>
+
+            <% if (feeds.length === 0) { %>
+                <div class="text-center py-5 text-muted">
+                    <p class="mb-0">No RSS feeds configured yet.</p>
+                    <p class="small">Use the Settings page to add a feed.</p>
+                </div>
+            <% } else { %>
+                <ul class="list-group">
+                    <% feeds.forEach(function(feed) { %>
+                        <li class="list-group-item d-flex align-items-center gap-2 py-3">
+                            <div class="flex-grow-1">
+                                <div class="fw-semibold"><%= feed.title %></div>
+                                <a href="<%= feed.url %>" target="_blank" class="text-muted small text-break"><%= feed.url %></a>
+                                <% if (feed.description) { %>
+                                    <div class="text-muted small mt-1"><%= feed.description %></div>
+                                <% } %>
+                            </div>
+                            <button class="refreshFeedButton btn btn-sm btn-outline-primary flex-shrink-0" data-id="<%= feed.id %>">Refresh</button>
+                        </li>
+                    <% }); %>
+                </ul>
+            <% } %>
+        </main>
+    </div>
+    <script src="/scripts/rss.js"></script>
+</body>
+</html>

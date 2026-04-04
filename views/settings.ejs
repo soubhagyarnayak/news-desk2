@@ -22,7 +22,7 @@
             </div>
 
             <div class="row g-3">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="card h-100">
                         <div class="card-header fw-semibold">Hacker News</div>
                         <div class="card-body">
@@ -34,7 +34,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="card h-100">
                         <div class="card-header fw-semibold">Opinion &amp; Editorial</div>
                         <div class="card-body">
@@ -44,6 +44,47 @@
                                 <button id="refreshoped" class="btn btn-outline-primary">Refresh</button>
                                 <button id="addoped" class="btn btn-success">+ Add Article</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100">
+                        <div class="card-header fw-semibold">RSS Feeds</div>
+                        <div class="card-body">
+                            <p class="card-text text-muted small mb-3">Manage RSS feed sources.</p>
+                            <div class="d-flex gap-2">
+                                <button id="addrss" class="btn btn-success">+ Add Feed</button>
+                                <a href="/rss" class="btn btn-outline-secondary">View All Feeds</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="rssContainer" style="display:none" class="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add RSS Feed</h5>
+                            <button type="button" class="btn-close" aria-label="Close" id="rssCrossButton"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="rssurl" class="form-label fw-semibold">Feed URL</label>
+                                <textarea id="rssurl" class="form-control" rows="2" placeholder="https://example.com/feed.xml"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="rsstitle" class="form-label fw-semibold">Title</label>
+                                <textarea id="rsstitle" class="form-control" rows="1" placeholder="Feed name"></textarea>
+                            </div>
+                            <div class="mb-1">
+                                <label for="rssdescription" class="form-label fw-semibold">Description <span class="text-muted fw-normal">(optional)</span></label>
+                                <textarea id="rssdescription" class="form-control" rows="2" placeholder="Brief description"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="rssCloseButton">Close</button>
+                            <button type="button" class="btn btn-primary" id="addRSSButton">Save</button>
                         </div>
                     </div>
                 </div>
