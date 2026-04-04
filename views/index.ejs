@@ -3,15 +3,60 @@
     <%- include ('partials/head') %>
     <title>News Desk</title>
 </head>
-<body class="container">
-    <main>
-        <div class="jumbotron">
-            <h1>News Desk. </h1>
-            <p class="lead">You are what you read!</p>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <span class="navbar-brand">News Desk</span>
         </div>
-    </main>
-    <h2><a href="/hn">Hacker News</a></h2>
-    <h2><a href="/oped">Opinions and Editorials</a></h2>
-    <h2><a href="/settings">Settings</a></h2>
+    </nav>
+    <div class="container py-5">
+        <main>
+            <div class="text-center pb-4 mb-5 border-bottom">
+                <h1 class="display-5 fw-bold">News Desk</h1>
+                <p class="lead text-muted">You are what you read.</p>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <div class="col-md-4">
+                    <a href="/hn" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center py-4">
+                                <h2 class="card-title h5 fw-semibold mb-2">Hacker News</h2>
+                                <p class="card-text text-muted small">Browse and manage your Hacker News article backlog.</p>
+                            </div>
+                            <div class="card-footer text-center bg-transparent border-top-0 pb-3">
+                                <span class="btn btn-outline-dark btn-sm">Open &rarr;</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="/oped" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center py-4">
+                                <h2 class="card-title h5 fw-semibold mb-2">Opinions &amp; Editorials</h2>
+                                <p class="card-text text-muted small">Read and annotate curated opinion and editorial pieces.</p>
+                            </div>
+                            <div class="card-footer text-center bg-transparent border-top-0 pb-3">
+                                <span class="btn btn-outline-dark btn-sm">Open &rarr;</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="/settings" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center py-4">
+                                <h2 class="card-title h5 fw-semibold mb-2">Settings</h2>
+                                <p class="card-text text-muted small">Refresh, purge, and manage your feed sources.</p>
+                            </div>
+                            <div class="card-footer text-center bg-transparent border-top-0 pb-3">
+                                <span class="btn btn-outline-dark btn-sm">Open &rarr;</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
 </body>
 </html>
