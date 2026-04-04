@@ -1,0 +1,84 @@
+<html lang="en">
+<head>
+    <%- include ('partials/head') %>
+    <title>RSS Entries</title>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">News Desk</a>
+            <a class="btn btn-outline-light btn-sm" href="/rss">← Feeds</a>
+        </div>
+    </nav>
+    <div class="container py-4">
+        <main>
+            <div class="d-flex align-items-baseline gap-3 pb-3 mb-4 border-bottom">
+                <h1 class="h3 mb-0">RSS Entries</h1>
+                <span class="text-muted">Backlog: <span class="badge bg-secondary"><%=backlogCount%></span></span>
+            </div>
+
+            <div id="errorMessage" style="display:none" class="alert alert-danger">
+                <strong>Error!</strong> A problem occurred while submitting your data.
+                <button type="button" class="btn-close float-end" id="errorClose" aria-label="Close"></button>
+            </div>
+
+            <div id="notesContainer" style="display:none" class="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Annotate Entry</h5>
+                            <button type="button" class="btn-close" aria-label="Close" id="notesCrossButton"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="notes" class="form-label fw-semibold">Notes</label>
+                                <textarea id="notes" class="form-control" rows="3" placeholder="Add your notes"></textarea>
+                            </div>
+                            <div class="mb-1">
+                                <label for="tags" class="form-label fw-semibold">Tags</label>
+                                <textarea id="tags" class="form-control" rows="2" placeholder="Add tags"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="notesCloseButton">Close</button>
+                            <button type="button" class="btn btn-primary" id="addAnnotationButton">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <% if (entries.size === 0) { %>
+                <div class="text-center py-5 text-muted">
+                    <p class="mb-0">No unread RSS entries.</p>
+                    <p class="small">Refresh a feed from the <a href="/rss">Feeds</a> page to fetch new entries.</p>
+                </div>
+            <% } %>
+
+            <% for (let feedTitle of entries.keys()) { %>
+                <div class="card mb-3 rss-feed-container">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="fw-semibold"><%=feedTitle%></span>
+                        <span class="badge bg-primary rounded-pill rss-feed-count"><%=entries.get(feedTitle).length%></span>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <% entries.get(feedTitle).forEach(function(entry) { %>
+                            <li id="rsse-<%=entry.id%>" class="list-group-item d-flex align-items-center gap-2 py-2">
+                                <a href="<%=entry.link%>" target="_blank" class="flex-grow-1 text-break"><%=entry.title%></a>
+                                <div class="d-flex gap-1 flex-shrink-0">
+                                    <button class="readButton btn btn-sm btn-outline-success">Read</button>
+                                    <button class="removeButton btn btn-sm btn-outline-danger">Remove</button>
+                                    <button class="annotateButton btn btn-sm btn-outline-secondary">Annotate</button>
+                                    <button class="copyLinkButton btn btn-sm btn-outline-secondary"
+                                        data-title="<%=entry.title%>"
+                                        data-link="<%=entry.link%>">Copy Link</button>
+                                </div>
+                            </li>
+                        <% }); %>
+                    </ul>
+                </div>
+            <% } %>
+        </main>
+    </div>
+    <script src="/scripts/rss-entries.js"></script>
+</body>
+</html>

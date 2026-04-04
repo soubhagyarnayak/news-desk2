@@ -8,7 +8,9 @@ const router = Router();
 const config = new ConfigService(join(__dirname, '..', '..', '.env'));
 const rssService = new RssService(config);
 
-rssService.init().catch(err => console.error('Failed to initialise RSSFeedMetadata table:', err));
+rssService.init().catch(err => console.error('Failed to initialise RSS tables:', err));
+
+// ── Feed management ──────────────────────────────────────────────────────────
 
 router.get('/', async (req, res) => {
   try {
@@ -45,6 +47,40 @@ router.post('/refresh', async (req, res) => {
   } else {
     res.status(500).send();
   }
+});
+
+// ── Entry management ─────────────────────────────────────────────────────────
+
+router.get('/entries', async (req, res) => {
+  try {
+    const { entries, count } = await rssService.getEntries();
+    res.render('rss-entries', { entries, backlogCount: count });
+  } catch (error) {
+    console.error('Error fetching RSS entries:', error);
+    res.status(500).send('Error fetching entries');
+  }
+});
+
+router.get('/entries/entry', async (req, res) => {
+  const entry = await rssService.getEntry(req.query.id as string);
+  if (entry == null) {
+    res.status(500).send('Error');
+  } else {
+    res.status(200).json(entry);
+  }
+});
+
+router.post('/entries', async (req, res) => {
+  const { operation, id } = req.body;
+  let result = false;
+  if (operation === 'markRead') {
+    result = await rssService.markEntryRead(id);
+  } else if (operation === 'remove') {
+    result = await rssService.removeEntry(id);
+  } else if (operation === 'annotate') {
+    result = await rssService.annotateEntry(id, req.body.tags, req.body.notes);
+  }
+  res.status(result ? 200 : 400).send(result ? 'success' : 'failure');
 });
 
 export default router;
