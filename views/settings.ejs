@@ -3,55 +3,82 @@
     <%- include ('partials/head') %>
     <title>Settings</title>
 </head>
-<body class="container">
-    <main>
-        <div class="jumbotron">
-            <h1>Settings </h1>
-            <p class="lead">Configure and Fix!</p>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">News Desk</a>
         </div>
-        <div id="errorMessage" style="display:none" class="alert alert-danger fade in">
-            <a href="#" class="close" data-dismiss="alert">&times;</a>
-            <strong>Error!</strong> A problem has been occurred while submitting your data.
-        </div>
-        <ul>
-            <li>
-                <input type="button" value="Purge HN" id="purgehn" class="btn btn-primary" />&nbsp;
-            </li>
-            <li>
-                <input type="button" value="Purge OpEd" id="purgeoped" class="btn btn-primary"/>&nbsp;
-            </li>
-            <li>
-                <input type="button" value="Add OpEd" id="addoped" class="btn btn-primary"/>&nbsp;
-            </li>
-            <li>
-                <input type="button" value="Refresh HN" id="refreshhn" class="btn btn-primary"/>&nbsp;
-            </li>
-            <li>
-                <input type="button" value="Refresh OpEd" id="refreshoped" class="btn btn-primary"/>&nbsp;
-            </li>
-        </ul>
-        <div id="categoryContainer" style="display:none" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add OpEd</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="categoryCrossButton"> 
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+    </nav>
+    <div class="container py-4">
+        <main>
+            <div class="d-flex align-items-baseline gap-3 pb-3 mb-4 border-bottom">
+                <h1 class="h3 mb-0">Settings</h1>
+                <span class="text-muted">Configure and manage your feeds</span>
+            </div>
+
+            <div id="errorMessage" style="display:none" class="alert alert-danger">
+                <strong>Error!</strong> A problem occurred while submitting your data.
+                <button type="button" class="btn-close float-end" id="errorClose" aria-label="Close"></button>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header fw-semibold">Hacker News</div>
+                        <div class="card-body">
+                            <p class="card-text text-muted small mb-3">Manage the Hacker News article feed.</p>
+                            <div class="d-flex gap-2">
+                                <button id="purgehn" class="btn btn-outline-danger">Purge</button>
+                                <button id="refreshhn" class="btn btn-outline-primary">Refresh</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <textarea id="opedlink" style="display:block;width:100%;padding: 2px" placeholder="add link"></textarea>
-                        <textarea id="opedtitle" style="display:block;width:100%;padding: 2px" placeholder="add title"></textarea>
-                        <textarea id="opeddescription" style="display:block;width:100%;padding: 2px" placeholder="add description"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="categoryCloseButton">Close</button>
-                        <button type="button" class="btn btn-primary" id="addCategoryButton">Save changes</button>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header fw-semibold">Opinion &amp; Editorial</div>
+                        <div class="card-body">
+                            <p class="card-text text-muted small mb-3">Manage opinion and editorial articles.</p>
+                            <div class="d-flex gap-2">
+                                <button id="purgeoped" class="btn btn-outline-danger">Purge</button>
+                                <button id="refreshoped" class="btn btn-outline-primary">Refresh</button>
+                                <button id="addoped" class="btn btn-success">+ Add Article</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </main>
+
+            <div id="categoryContainer" style="display:none" class="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Add OpEd Article</h5>
+                            <button type="button" class="btn-close" aria-label="Close" id="categoryCrossButton"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="opedlink" class="form-label fw-semibold">Link</label>
+                                <textarea id="opedlink" class="form-control" rows="2" placeholder="https://..."></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="opedtitle" class="form-label fw-semibold">Title</label>
+                                <textarea id="opedtitle" class="form-control" rows="2" placeholder="Article title"></textarea>
+                            </div>
+                            <div class="mb-1">
+                                <label for="opeddescription" class="form-label fw-semibold">Description</label>
+                                <textarea id="opeddescription" class="form-control" rows="3" placeholder="Brief description"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="categoryCloseButton">Close</button>
+                            <button type="button" class="btn btn-primary" id="addCategoryButton">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
     <script src="/scripts/settings.js"></script>
 </body>
 </html>

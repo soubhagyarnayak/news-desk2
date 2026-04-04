@@ -3,55 +3,80 @@
     <%- include ('partials/head') %>
     <title>Hacker News Articles</title>
 </head>
-<body class="container">
-    <main>
-        <div id="errorMessage" style="display:none" class="alert alert-danger fade in">
-            <a href="#" class="close" data-dismiss="alert">&times;</a>
-            <strong>Error!</strong> A problem has been occurred while submitting your data.
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">News Desk</a>
         </div>
-        <div id="notesContainer" style="display:none" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Annotate</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="notesCrossButton"> 
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <textarea id="notes" style="display:block;width:100%;padding: 2px" placeholder="add notes"></textarea>
-                        <textarea id="tags" style="display:block;width:100%;padding: 2px" placeholder="add tags" data-tags="<%= tags.map(t=>t.tag)%>"></textarea>
-                        <textarea id="availableTags" style="display:block;width:100%;padding: 2px"></textarea>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="notesCloseButton">Close</button>
-                        <button type="button" class="btn btn-primary" id="addAnnotationButton">Save changes</button>
+    </nav>
+    <div class="container py-4">
+        <main>
+            <div class="d-flex align-items-baseline gap-3 pb-3 mb-4 border-bottom">
+                <h1 class="h3 mb-0">Hacker News</h1>
+                <span class="text-muted">Backlog: <span class="badge bg-secondary"><%=backlogCount%></span></span>
+            </div>
+
+            <div id="errorMessage" style="display:none" class="alert alert-danger">
+                <strong>Error!</strong> A problem occurred while submitting your data.
+                <button type="button" class="btn-close float-end" id="errorClose" aria-label="Close"></button>
+            </div>
+
+            <div id="notesContainer" style="display:none" class="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Annotate Article</h5>
+                            <button type="button" class="btn-close" aria-label="Close" id="notesCrossButton"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="notes" class="form-label fw-semibold">Notes</label>
+                                <textarea id="notes" class="form-control" rows="3" placeholder="Add your notes"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="tags" class="form-label fw-semibold">Tags</label>
+                                <textarea id="tags" class="form-control" rows="2" placeholder="Add tags" data-tags="<%= tags.map(t=>t.tag)%>"></textarea>
+                            </div>
+                            <div class="mb-1">
+                                <label class="form-label fw-semibold text-muted small">Available Tags</label>
+                                <textarea id="availableTags" class="form-control form-control-sm text-muted" rows="2" readonly></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" id="notesCloseButton">Close</button>
+                            <button type="button" class="btn btn-primary" id="addAnnotationButton">Save</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="jumbotron">
-            <h1>Hacker news articles. </h1>
-            <p class="lead">Backlog count:<%=backlogCount%></p>
-        </div>
-        <% for (let key of articles.keys()){%>
-            <div class="articles-day-container">
-                <h3 class="article-day-title"><%=key%>: To Read <span class="article-day-count"><%=articles.get(key).length%></span></h3>
-                <ul>
-                    <% articles.get(key).forEach(function(article){ %>
-                        <li id="<%=article.id%>"><a href="https://news.ycombinator.com/item?id=<%=article.id%>" target="_blank"><%= article.title%></a>&nbsp;
-                            <input type="button" value="Mark Read" id="rb<%= article.id%>" class="readButton btn btn-outline-dark"/>&nbsp;
-                            <input type="button" value="Remove" id="rmb<%= article.id%>" class="removeButton btn btn-outline-dark"/>&nbsp;
-                            <input type="button" value="Annotate" id="ann<%= article.id%>" class="annotateButton btn btn-outline-dark"/>&nbsp;
-                        </li>
-                    <%  }); %>
-                </ul>
-            </div>
-        <%}%>
-    </main>
+
+            <% for (let key of articles.keys()){ %>
+                <div class="card mb-3 articles-day-container">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span class="fw-semibold article-day-title"><%=key%></span>
+                        <span class="badge bg-primary rounded-pill article-day-count"><%=articles.get(key).length%></span>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <% articles.get(key).forEach(function(article){ %>
+                            <li id="<%=article.id%>" class="list-group-item d-flex align-items-center gap-2 py-2">
+                                <a href="https://news.ycombinator.com/item?id=<%=article.id%>" target="_blank" class="flex-grow-1 text-break"><%= article.title%></a>
+                                <div class="d-flex gap-1 flex-shrink-0">
+                                    <button id="rb<%= article.id%>" class="readButton btn btn-sm btn-outline-success">Read</button>
+                                    <button id="rmb<%= article.id%>" class="removeButton btn btn-sm btn-outline-danger">Remove</button>
+                                    <button id="ann<%= article.id%>" class="annotateButton btn btn-sm btn-outline-secondary">Annotate</button>
+                                    <button class="copyLinkButton btn btn-sm btn-outline-secondary"
+                                        data-title="<%= article.title %>"
+                                        data-link="<%= article.link %>"
+                                        data-id="<%= article.id %>">Copy Link</button>
+                                </div>
+                            </li>
+                        <% }); %>
+                    </ul>
+                </div>
+            <% } %>
+        </main>
+    </div>
     <script> var exports = {}; </script>
     <script src="/scripts/hn.js" type="module"></script>
 </body>
 </html>
-
-
