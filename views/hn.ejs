@@ -61,9 +61,9 @@
                             <li id="<%=article.id%>" class="list-group-item d-flex align-items-center gap-2 py-2">
                                 <a href="https://news.ycombinator.com/item?id=<%=article.id%>" target="_blank" class="flex-grow-1 text-break"><%= article.title%></a>
                                 <div class="d-flex gap-1 flex-shrink-0">
-                                    <button id="rb<%= article.id%>" class="readButton btn btn-sm btn-outline-success">Read</button>
-                                    <button id="rmb<%= article.id%>" class="removeButton btn btn-sm btn-outline-danger">Remove</button>
-                                    <button id="ann<%= article.id%>" class="annotateButton btn btn-sm btn-outline-secondary">Annotate</button>
+                                    <button data-id="<%= article.id %>" id="rb<%= article.id%>" class="readButton btn btn-sm btn-outline-success">Read</button>
+                                    <button data-id="<%= article.id %>" id="rmb<%= article.id%>" class="removeButton btn btn-sm btn-outline-danger">Remove</button>
+                                    <button data-id="<%= article.id %>" id="ann<%= article.id%>" class="annotateButton btn btn-sm btn-outline-secondary">Annotate</button>
                                     <button class="copyLinkButton btn btn-sm btn-outline-secondary"
                                         data-title="<%= article.title %>"
                                         data-link="<%= article.link %>"

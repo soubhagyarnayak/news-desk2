@@ -41,26 +41,22 @@ const postData = function postData(url:string, data:Data, onSuccess:SuccessRespo
     });
 };
 
-const getAssociatedId= function(event: Event): string {
-    const target = event.target as HTMLButtonElement;
-    const parentElement = target.parentNode as HTMLElement;
-    const id = parentElement.getAttribute('id') as string;
-    return id;
-}
-
 const readButtonClicked = function(event: Event){
-    const id = getAssociatedId(event);
+    const button = event.target as HTMLButtonElement;
+    const id = button.getAttribute('data-id') as string;
     const data = {'operation':'markRead' as Operation, 'id':id};
     postData('/hn',data,removeArticle);
 };
 
 const removeButtonClicked = function(event: Event){
-    const id = getAssociatedId(event);
+    const button = event.target as HTMLButtonElement;
+    const id = button.getAttribute('data-id') as string;
     const data = {'operation':'remove' as Operation, 'id':id};
     postData('/hn',data,removeArticle);
 };
 const archiveButtonClicked = function(event: Event){
-    const id = getAssociatedId(event);
+    const button = event.target as HTMLButtonElement;
+    const id = button.getAttribute('data-id') as string;
     const data = {'operation':'archive' as Operation, 'id':id, 'url':"https://news.ycombinator.com/item?id="+id};
     postData('/hn',data,()=>{});
 }
@@ -80,7 +76,8 @@ const addAnnotateButtonClicked = function(){
     });
 };
 const annotateButtonClicked = function(event: Event){
-    const id = getAssociatedId(event);
+    const button = event.target as HTMLButtonElement;
+    const id = button.getAttribute('data-id') as string;
     fetch(`hn/article?id=${id}`,{
         method: 'GET'
     }).then(function(response){
@@ -118,23 +115,39 @@ const tagKeyDown = function tagKeyDown(event: KeyboardEvent){
     document.getElementById("availableTags")!.textContent = tags.split(",").filter(x=>x.startsWith(text)).join(",");
 }
 
+const copyLinkButtonClicked = function (event: Event) {
+    const button = event.target as HTMLButtonElement;
+    const title = button.getAttribute('data-title') as string;
+    const link = button.getAttribute('data-link') as string;
+    const id = button.getAttribute('data-id') as string;
+    navigator.clipboard.writeText(`[${title}](${link})\nhttps://news.ycombinator.com/item?id=${id}`).then(() => {
+        console.log('Link copied to clipboard');
+    }).catch(err => {
+        console.error('Failed to copy link: ', err);
+    });
+};
+
 document.addEventListener("DOMContentLoaded", function(){
     document.getElementById("addAnnotationButton")!.addEventListener("click",addAnnotateButtonClicked);
-    const markReadButtons = document.querySelectorAll("input.readButton");
+    const markReadButtons = document.querySelectorAll("button.readButton");
     markReadButtons.forEach(function(markReadButton:Element){
         markReadButton.addEventListener("click", readButtonClicked);
     });
-    const removeButtons = document.querySelectorAll("input.removeButton");
+    const removeButtons = document.querySelectorAll("button.removeButton");
     removeButtons.forEach(function(removeButton:Element){
         removeButton.addEventListener("click", removeButtonClicked);
     });
-    const annotateButtons = document.querySelectorAll("input.annotateButton");
+    const annotateButtons = document.querySelectorAll("button.annotateButton");
     annotateButtons.forEach(function(annotateButton:Element){
         annotateButton.addEventListener("click", annotateButtonClicked);
     });
-    const archiveButtons = document.querySelectorAll("input.archiveButton");
+    const archiveButtons = document.querySelectorAll("button.archiveButton");
     archiveButtons.forEach(function(archiveButton:Element){
         archiveButton.addEventListener("click", archiveButtonClicked);
+    });
+    const copyLinkButtons = document.querySelectorAll("button.copyLinkButton");
+    copyLinkButtons.forEach(function(copyLinkButton:Element){
+        copyLinkButton.addEventListener("click", copyLinkButtonClicked);
     });
     document.getElementById("errorMessage")!.addEventListener("click",dismissAlert);
     document.getElementById("notesCloseButton")!.addEventListener("click",dismissNotes);
