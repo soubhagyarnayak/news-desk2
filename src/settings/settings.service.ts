@@ -1,4 +1,4 @@
-import { Channel, Connection, connect } from 'amqplib';
+import { Channel, ChannelModel, connect } from 'amqplib';
 import { ConfigService } from '../config.service';
 
 type Command = 'processHN' | 'processOpEd' | 'purgeHN';
@@ -11,10 +11,11 @@ export class SettingsService {
   }
 
   async runCommand(command: Command): Promise<boolean> {
-    let connection: Connection, channel: Channel;
+    let channelModel: ChannelModel | null = null;
+    let channel: Channel | null = null;
     try {
-      connection = await connect(this.queueConnectionString);
-      channel = await connection.createChannel();
+      channelModel= await connect(this.queueConnectionString);
+      channel = await channelModel.createChannel();
       await channel.sendToQueue(
         'newsparser',
         Buffer.from(`{"command": "${command}"}`, 'utf-8'),
@@ -23,8 +24,8 @@ export class SettingsService {
       console.log(`Encountered error:${error}`);
       return false;
     } finally {
-      await channel.close();
-      await connection.close();
+      await channel?.close();
+      await channelModel?.close();
     }
     return true;
   }

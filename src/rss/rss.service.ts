@@ -1,4 +1,4 @@
-import { Channel, Connection, connect } from 'amqplib';
+import { Channel, ChannelModel, connect } from 'amqplib';
 import { Pool } from 'pg';
 import { ConfigService } from '../config.service';
 import { RssFeedMetadata } from './rssFeedMetadata.interface';
@@ -89,7 +89,7 @@ export class RssService {
       if (!entriesMap.has(row.feed_title)) {
         entriesMap.set(row.feed_title, []);
       }
-      entriesMap.get(row.feed_title).push(entry);
+      entriesMap.get(row.feed_title)?.push(entry);
       count++;
     }
     return { entries: entriesMap, count };
@@ -130,10 +130,11 @@ export class RssService {
   }
 
   async enqueueFeedRefresh(feedId: number): Promise<boolean> {
-    let connection: Connection, channel: Channel;
+    let channelModel: ChannelModel | null = null;
+    let channel: Channel | null = null;
     try {
-      connection = await connect(this.queueConnectionString);
-      channel = await connection.createChannel();
+      channelModel = await connect(this.queueConnectionString);
+      channel = await channelModel.createChannel();
       await channel.sendToQueue(
         'newsparser',
         Buffer.from(`{"command": "refreshRSS", "feedId": ${feedId}}`, 'utf-8'),
@@ -142,8 +143,8 @@ export class RssService {
       console.log(`Encountered error enqueuing RSS refresh: ${error}`);
       return false;
     } finally {
-      await channel.close();
-      await connection.close();
+      await channel?.close();
+      await channelModel?.close();
     }
     return true;
   }
