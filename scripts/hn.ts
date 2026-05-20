@@ -90,6 +90,7 @@ const annotateButtonClicked = function(event: Event){
             notesContainer.setAttribute("associatedId",id);
             (<HTMLInputElement>document.getElementById("tags")).value = data.tags||'';
             (<HTMLInputElement>document.getElementById('notes')).value = data.notes||'';
+            (<HTMLInputElement>document.getElementById('description')).value = data.description||'';
             document.getElementById("availableTags")!.textContent = document.getElementById("tags")!.getAttribute("data-tags")!.split(" ").join(",");
         }
     }).catch(error=>{
