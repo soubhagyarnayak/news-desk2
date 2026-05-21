@@ -3,7 +3,7 @@ import passport = require('passport');
 import { join } from 'path';
 import { ConfigService } from '../config.service';
 import { HnService } from '../hn/hn.service';
-import { HnTagDetails } from 'src/hn/hnTag.interface';
+import { HnTagDetails } from '../hn/hnTag.interface';
 
 const router = Router();
 
