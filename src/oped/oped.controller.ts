@@ -36,10 +36,10 @@ export class OpedController {
   }
 
   async getArticle(req: any, res: any) {
-    const annotation: OpedAnnotation = await this.opedService.getArticle(
+    const annotation: OpedAnnotation|undefined = await this.opedService.getArticle(
       req.query.id,
     );
-    if (annotation == null) {
+    if (annotation == undefined) {
       res.status(500).send('Error');
     } else {
       res.status(200).send(annotation);

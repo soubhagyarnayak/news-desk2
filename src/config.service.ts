@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import { Pool, PoolConfig } from 'pg';
 
 export class ConfigService {
-  private readonly envConfig: { [key: string]: string };
+  private readonly envConfig!: { [key: string]: string; };
 
   constructor(filePath: string) {
     if (fs.existsSync(filePath)) {

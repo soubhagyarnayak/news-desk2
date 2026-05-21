@@ -5,10 +5,6 @@ import { Pool } from 'pg';
 import { HnTag, HnTagDetails } from './hnTag.interface';
 
 export class HnService {
-  private user: string;
-  private password: string;
-  private host: string;
-  private database: string;
   private pool: Pool;
 
   constructor(config: ConfigService) {
@@ -48,7 +44,7 @@ export class HnService {
       if (!articlesForDates.has(key)) {
         articlesForDates.set(key, new Array<HnArticle>());
       }
-      articlesForDates.get(key).push(article);
+      articlesForDates.get(key)?.push(article);
       backlogCount++;
     });
     const result: HnArticlePerDayMap = {
@@ -68,11 +64,11 @@ export class HnService {
     return true;
   }
 
-  async getArticle(id: string): Promise<HnArticleAnnotationInfo> {
+  async getArticle(id: string): Promise<HnArticleAnnotationInfo | undefined> {
     const query =
       'SELECT tags,notes,description FROM hackernewsarticles WHERE id=$1';
     const args = [id];
-    let annotationInfo = null;
+    let annotationInfo: HnArticleAnnotationInfo | undefined = undefined;
     const result = await this.pool.query(query, args);
     if (result.rows.length > 0) {
       const row = result.rows[0];
@@ -101,12 +97,12 @@ export class HnService {
     return tags;
   }
 
-  async getTagDetails(tagId: string): Promise<HnTagDetails> {
+  async getTagDetails(tagId: string): Promise<HnTagDetails|undefined> {
     const getTagQuery =
       'SELECT id,tag,description FROM hacker_news_tags WHERE id=$1';
     const result = await this.pool.query(getTagQuery, [tagId]);
-    let tagDetails: HnTagDetails = { articles: [], tag: null };
-    if (result.rowCount > 0) {
+    let tagDetails: HnTagDetails | undefined = undefined;
+    if (result.rowCount && result.rowCount>0) {
       const tagInstance: HnTag = {
         id: result.rows[0]['id'],
         tag: result.rows[0]['tag'],

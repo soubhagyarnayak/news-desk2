@@ -38,8 +38,8 @@ export class HnController {
   }
 
   async postHn(req: any, res: any) {
-    let query = null;
-    let args = [];
+    let query: string|null = null;
+    let args: any[] = [];
     if (req.body.operation == 'markRead') {
       query = 'UPDATE hackernewsarticles SET isread = true WHERE id = $1';
       args = [req.body.id];
@@ -50,6 +50,11 @@ export class HnController {
       query = 'UPDATE hackernewsarticles SET tags = $1, notes=$2 WHERE id =$3';
       args = [req.body.tags, req.body.notes, req.body.id];
     }
+
+    if (!query) {
+      res.status(400).send('Invalid operation');
+      return;
+    }
     const result: boolean = await this.hnService.update(query, args);
     if (result) {
       res.status(200).send('success');
@@ -59,9 +64,9 @@ export class HnController {
   }
 
   async getHnArticle(req: any, res: any) {
-    const annotationInfo: HnArticleAnnotationInfo =
+    const annotationInfo: HnArticleAnnotationInfo|undefined =
       await this.hnService.getArticle(req.query.id);
-    if (annotationInfo == null) {
+    if (annotationInfo == undefined) {
       res.status(500).send('Error');
     } else {
       res.status(200).send(annotationInfo);
@@ -74,9 +79,13 @@ export class HnController {
   }
 
   async getTag(req: any, res: any) {
-    const hnTagDetails: HnTagDetails = await this.hnService.getTagDetails(
+    const hnTagDetails: HnTagDetails|undefined = await this.hnService.getTagDetails(
       req.params.tagId,
     );
+    if (!hnTagDetails) {
+      res.status(404).send('Tag not found');
+      return;
+    }
     return res.render('tag', {
       articles: hnTagDetails.articles,
       tag: hnTagDetails.tag.tag,

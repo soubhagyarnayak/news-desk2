@@ -5,10 +5,6 @@ import { ConfigService } from '../config.service';
 import { Pool } from 'pg';
 
 export class OpedService {
-  private user: string;
-  private password: string;
-  private host: string;
-  private database: string;
   private pool: Pool;
 
   constructor(config: ConfigService) {
@@ -32,12 +28,12 @@ export class OpedService {
       if (!categoriesMap.has(categoryTitle)) {
         categoriesMap.set(categoryTitle, new Array<OpedArticle>());
       }
-      categoriesMap.get(categoryTitle).push(article);
+      categoriesMap.get(categoryTitle)?.push(article);
       pending++;
     });
     const categories = new Array<OpedCategory>();
     for (const key of categoriesMap.keys()) {
-      categories.push({ title: key, articles: categoriesMap.get(key) });
+      categories.push({ title: key, articles: categoriesMap.get(key)||[] });
     }
     return { categories: categories, pending: pending };
   }
@@ -70,10 +66,10 @@ export class OpedService {
     return await this.update(query, args);
   }
 
-  async getArticle(id: string): Promise<OpedAnnotation> {
+  async getArticle(id: string): Promise<OpedAnnotation | undefined> {
     const query = 'SELECT tags,notes,description FROM OpEdArticle WHERE id=$1';
     const args = [id];
-    let annotationInfo = null;
+    let annotationInfo: OpedAnnotation | undefined = undefined;
     const result = await this.pool.query(query, args);
     if (result.rows.length > 0) {
       const row = result.rows[0];

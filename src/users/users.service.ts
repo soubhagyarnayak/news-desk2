@@ -2,10 +2,6 @@ import { Pool } from 'pg';
 import { ConfigService } from '../config.service';
 
 export class UsersService {
-  private user: string;
-  private password: string;
-  private host: string;
-  private database: string;
   private pool: Pool;
 
   constructor(config: ConfigService) {

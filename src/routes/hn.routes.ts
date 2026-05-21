@@ -3,6 +3,7 @@ import passport = require('passport');
 import { join } from 'path';
 import { ConfigService } from '../config.service';
 import { HnService } from '../hn/hn.service';
+import { HnTagDetails } from 'src/hn/hnTag.interface';
 
 const router = Router();
 
@@ -43,8 +44,8 @@ router.get('/read', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  let query = null;
-  let args = [];
+  let query: string | undefined = undefined;
+  let args: any[] = [];
   if (req.body.operation == 'markRead') {
     query = 'UPDATE hackernewsarticles SET isread = true WHERE id = $1';
     args = [req.body.id];
@@ -55,6 +56,12 @@ router.post('/', async (req, res) => {
     query = 'UPDATE hackernewsarticles SET tags = $1, notes=$2 WHERE id =$3';
     args = [req.body.tags, req.body.notes, req.body.id];
   }
+
+  if (!query) {
+    res.status(400).send('Invalid operation');
+    return;
+  }
+
   const result: boolean = await hnService.update(query, args);
   if (result) {
     res.status(200).send('success');
@@ -78,7 +85,11 @@ router.get('/tags', async (req, res) => {
 });
 
 router.get('/tags/:tagId', async (req, res) => {
-  const hnTagDetails = await hnService.getTagDetails(req.params.tagId);
+  const hnTagDetails: HnTagDetails|undefined = await hnService.getTagDetails(req.params.tagId);
+  if (!hnTagDetails) {
+    res.status(404).send('Tag not found');
+    return;
+  }
   return res.render('tag', {
     articles: hnTagDetails.articles,
     tag: hnTagDetails.tag.tag,

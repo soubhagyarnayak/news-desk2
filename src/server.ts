@@ -2,7 +2,7 @@ import express = require('express');
 import { join } from 'path';
 import { config } from 'dotenv';
 import morgan = require('morgan');
-import * as cookieParser from 'cookie-parser';
+import cookieParser = require('cookie-parser');
 import appRoutes from './routes/app.routes';
 import hnRoutes from './routes/hn.routes';
 import authRoutes from './routes/auth.routes';
