@@ -9,6 +9,7 @@
     "sourceMap": true,
     "outDir": "./dist",
     "incremental": true,
+    "types": ["jest"]
   },
   "exclude": ["node_modules","./scripts","./dist"],
   "noImpicitAny": true,
