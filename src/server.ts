@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.routes';
 import opedRoutes from './routes/oped.routes';
 import settingsRoutes from './routes/settings.routes';
 import rssRoutes from './routes/rss.routes';
+import stocksRoutes from './routes/stocks.routes';
 import passport = require('passport');
 import configurePassport from './auth/passport';
 
@@ -36,6 +37,7 @@ export async function startServer(portArg?: string | number) {
   app.use('/oped', opedRoutes);
   app.use('/settings', settingsRoutes);
   app.use('/rss', rssRoutes);
+  app.use('/stocks', stocksRoutes);
 
   return new Promise<void>((resolve, reject) => {
     const server = app.listen(port, () => {
