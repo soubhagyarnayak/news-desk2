@@ -1,4 +1,4 @@
-FROM node:22.5-alpine AS devo
+FROM node:26-alpine AS devo
 
 LABEL maintainer="Soubhagya R Nayak soubhagya.r.nayak@gmail.com"
 
@@ -14,7 +14,7 @@ COPY . .
 
 RUN npm run build
 
-FROM node:22.5-alpine as prod
+FROM node:26-alpine AS prod
 
 WORKDIR ./app
 
